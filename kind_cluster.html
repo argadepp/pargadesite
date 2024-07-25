@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating a Kind Cluster and Installing NGINX Ingress</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Tech Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tutorials</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="display-4">Creating a Kind Cluster and Installing NGINX Ingress</h1>
+        <p class="lead">In this tutorial, we will walk through the steps to create a Kubernetes cluster using kind and install the NGINX Ingress controller.</p>
+        <hr>
+        <h2>Prerequisites</h2>
+        <ul>
+            <li>Docker installed on your local machine</li>
+            <li>kubectl installed on your local machine</li>
+            <li>kind installed on your local machine</li>
+        </ul>
+        <h2>Step 1: Create a Kind Cluster</h2>
+        <p>First, create a configuration file for the kind cluster:</p>
+        <pre><code>cat <<EOF > kind-config.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+EOF
+        </code></pre>
+        <p>Now, create the cluster using the configuration file:</p>
+        <pre><code>kind create cluster --config kind-config.yaml</code></pre>
+        <h2>Step 2: Verify the Cluster</h2>
+        <p>Use the following command to verify that your cluster is up and running:</p>
+        <pre><code>kubectl get nodes</code></pre>
+        <h2>Step 3: Install NGINX Ingress Controller</h2>
+        <p>Apply the NGINX Ingress controller manifests:</p>
+        <pre><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml</code></pre>
+        <h2>Step 4: Verify NGINX Ingress Installation</h2>
+        <p>Ensure that the NGINX Ingress controller pods are running:</p>
+        <pre><code>kubectl get pods -n ingress-nginx</code></pre>
+        <h2>Conclusion</h2>
+        <p>You have successfully created a kind cluster and installed the NGINX Ingress controller. You can now start deploying your applications and expose them using the NGINX Ingress.</p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more about Kubernetes</a>
+    </div>
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2024 Tech Blog. All Rights Reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
