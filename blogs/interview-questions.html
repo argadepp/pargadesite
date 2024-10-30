@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Interview Questions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">DevOps Interview Questions</h1>
+
+        <div class="accordion" id="questionsAccordion">
+
+            <!-- Introduction & Daily Activities -->
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Introduction & Daily Activities
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Could you briefly introduce yourself and share your professional background?</li>
+                            <li>What are your day-to-day responsibilities in your current or previous roles?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AWS Cloud Services -->
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            AWS Cloud Services
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Which AWS services have you worked with? (Examples: EC2, EKS, S3, IAM, VPC, Route 53, Lambda, RDS)</li>
+                            <li>Can you walk me through a recent project where you used multiple AWS services together?</li>
+                            <li>How do you ensure security and compliance when working with AWS services?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terraform -->
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Terraform
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Have you created any Terraform modules? If so, what was the module's purpose and structure?</li>
+                            <li>How do you manage dependencies between resources in Terraform?</li>
+                            <li>Can you explain the concept of state locking, and how do you achieve it in your projects?</li>
+                            <li>What strategies do you use to manage and share Terraform state files?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kubernetes & Amazon EKS -->
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Kubernetes & Amazon EKS
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Can you explain the differences between Secrets and ConfigMaps in Kubernetes?</li>
+                            <li>How do you differentiate between StatefulSets and Deployments, and when would you use each?</li>
+                            <li>What steps do you follow to upgrade an EKS cluster?</li>
+                            <li>When troubleshooting or tracing issues with pods, what is your typical process?</li>
+                            <li>How do you set up and manage ingress flow in Kubernetes?</li>
+                            <li>Have you worked with Istio or other service meshes? If so, what benefits did it bring to your environment?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub & Version Control -->
+            <div class="card">
+                <div class="card-header" id="headingFive">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            GitHub & Version Control
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>What is your strategy for merging pull requests? How do you handle large or conflicting changes?</li>
+                            <li>Can you explain the difference between rebasing and merging?</li>
+                            <li>What steps do you take to resolve merge conflicts?</li>
+                            <li>Have you created or customized any GitHub workflows? If so, what purpose do they serve?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docker -->
+            <div class="card">
+                <div class="card-header" id="headingSix">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            Docker
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Can you share some basics about Docker?</li>
+                            <li>What is your typical flow for building, tagging, and pushing a Docker image to a registry?</li>
+                            <li>How do you handle environment-specific configurations in Docker?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafana & Monitoring -->
+            <div class="card">
+                <div class="card-header" id="headingSeven">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Grafana & Monitoring
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>What monitoring tools have you used? (Examples: Grafana, Prometheus, CloudWatch, etc.)</li>
+                            <li>Have you created any custom Prometheus queries? If so, what were they for?</li>
+                            <li>Could you describe your setup for centralized logging, such as using EFK (Elasticsearch, Fluentd, and Kibana)?</li>
+                            <li>Have you created custom dashboards in Grafana? If so, what kinds of metrics did you track?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jenkins & CI/CD -->
+            <div class="card">
+                <div class="card-header" id="headingEight">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            Jenkins & CI/CD
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>What’s your experience with Jenkins? Have you customized any pipelines?</li>
+                            <li>How do you manage credentials and secrets in your CI/CD workflows?</li>
+                            <li>Have you implemented any automated testing or validation steps in Jenkins?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security & Compliance -->
+            <div class="card">
+                <div class="card-header" id="headingNine">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                            Security & Compliance
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Which tools do you use for security in your projects?</li>
+                            <li>How do you handle vulnerability scanning for Docker images or infrastructure as code?</li>
+                            <li>What practices do you follow to secure cloud resources, containers, and CI/CD pipelines?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Questions -->
+            <div class="card">
+                <div class="card-header" id="headingTen">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                            Additional Questions
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#questionsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>How do you stay up to date with new tools and best practices in DevOps and cloud computing?</li>
+                            <li>What is your process for troubleshooting and resolving production issues quickly and effectively?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
