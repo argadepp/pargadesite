@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Deployment on KIND</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #fff !important;
+        }
+
+        .hero {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .content-section {
+            padding: 40px 0;
+        }
+
+        .tool-img {
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">DevSecOps Insights with Pratik Argade</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tools">Tools</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.linkedin.com/in/pratik-argade-2bb841168/" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to DevSecOps Insights with Pratik Argade</h1>
+            <p>Your one-stop blog for the latest in DevSecOps tools and technologies.</p>
+        </div>
+    </section>
+
+    <!-- Project Title -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="text-center">🎉 Microservices Deployment on KIND</h2>
+            <p>This project demonstrates a microservices-based application deployment on a local Kubernetes environment using KIND (Kubernetes in Docker). It includes multiple applications such as SockShop, Grafana Dashboard, and Truedesk, along with observability tools like Loki and Grafana. Deployment and setup scripts are managed using a Makefile for ease of use.</p>
+        </div>
+    </section>
+
+    <!-- Project Structure -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="text-center">📁 Project Structure</h2>
+            <pre>
+.
+├── applications                # Application Helm charts and deployment manifests
+│   ├── grafana-dashboard       # Grafana dashboards and configs
+│   ├── log-application         # Logging application deployment
+│   ├── sockshop                # Sockshop microservices application
+│   └── truedesk                # Truedesk application resources
+├── apps                        # Pre-configured app files for Grafana, Istio, Loki, Prometheus, SockShop
+├── cluster                     # KIND cluster configuration and ArgoCD values
+├── kargotest                   # Test resources for Kargo setup
+├── Makefile                    # Build and deployment commands
+└── README.md                   # Project documentation
+            </pre>
+        </div>
+    </section>
+
+    <!-- Prerequisites -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="text-center">📋 Prerequisites</h2>
+            <p>Before you begin, ensure you have the following installed:</p>
+            <ul>
+                <li>Docker 🐳</li>
+                <li>KIND 🌟</li>
+                <li>kubectl 🔧</li>
+            </ul>
+            <p>Make sure that both KIND and kubectl are in your system's PATH.</p>
+        </div>
+    </section>
+
+    <!-- Setup Instructions -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="text-center">🛠️ Setup Instructions</h2>
+            <ol>
+                <li>
+                    <strong>Create a KIND Cluster</strong>
+                    <p>To create the KIND cluster as defined in cluster/cluster.yaml, run:</p>
+                    <code>make create-cluster</code>
+                    <p>This command creates a KIND cluster named demo-stuff (default name) using the specified configuration.</p>
+                </li>
+                <li>
+                    <strong>Install Ingress Controller</strong>
+                    <p>To deploy the Ingress-NGINX controller in the ingress-nginx namespace, execute:</p>
+                    <code>make install-ingress</code>
+                    <p>This command applies the official Ingress-NGINX manifest for KIND.</p>
+                </li>
+                <li>
+                    <strong>Install ArgoCD</strong>
+                    <p>To install ArgoCD using Helm with custom values from cluster/argo-values.yaml, run:</p>
+                    <code>make install-argocd</code>
+                    <p>ArgoCD will be installed in the argocd namespace, enabling GitOps-style application management.</p>
+                </li>
+                <li>
+                    <strong>Delete KIND Cluster</strong>
+                    <p>To delete the KIND cluster and all associated resources, run:</p>
+                    <code>make delete-cluster</code>
+                    <p>This command removes the cluster named demo-stuff from your local environment.</p>
+                </li>
+                <li>
+                    <strong>Reset: Clean Resources and Cluster</strong>
+                    <p>To delete all created resources and then remove the KIND cluster, use:</p>
+                    <code>make reset</code>
+                    <p>This command deletes Kubernetes resources and then removes the KIND cluster.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Application Deployment -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="text-center">🛠️ Application Deployment</h2>
+            <p>The applications directory contains multiple applications, including:</p>
+            <ul>
+                <li><strong>Grafana Dashboard:</strong> Custom Grafana dashboard configurations.</li>
+                <li><strong>Log Application:</strong> A sample application to test Loki logging.</li>
+                <li><strong>SockShop:</strong> A microservices-based application mimicking an online shop.</li>
+                <li><strong>Truedesk:</strong> A support desk application with MongoDB and Elasticsearch resources.</li>
+            </ul>
+            <p>You can find the complete project in the repository: <a href="https://github.com/argadepp/argocd-demo.git" target="_blank">argocd-demo.git</a></p>
+        </div>
+    </section>
+
+    <!-- Applications -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="text-center">📦 Applications</h2>
+            <h4>🌟 Grafana Dashboard</h4>
+            <p>The Grafana dashboard configuration can be found in applications/grafana-dashboard, including sample JSON dashboards and monitoring templates.</p>
+            <h4>📜 Log Application</h4>
+            <p>A sample log application is available in applications/log-application to test with Loki.</p>
+            <h4>🛍️ SockShop Application</h4>
+            <p>The SockShop application is configured as a Helm chart in applications/sockshop. It includes services like carts, orders, and user management.</p>
+            <h4>💼 Truedesk</h4>
+            <p>The Truedesk application is available in applications/truedesk with supporting Elasticsearch and MongoDB stateful resources.</p>
+        </div>
+    </section>
+
+    <!-- Observability Stack -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="text-center">📊 Observability Stack</h2>
+            <p>This project includes a powerful observability stack comprising:</p>
+            <ul>
+                <li><strong>Loki:</strong> A logging backend for monitoring logs. 📝</li>
+                <li><strong>Grafana:</strong> A visualization tool with preconfigured dashboards. 📈</li>
+                <li><strong>Prometheus:</strong> A monitoring toolkit that collects metrics from configured targets. 📊</li>
+                <li><strong>Istio:</strong> A service mesh for managing microservices communication. 🌐</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Repository Section -->
+    <section class="content-section">
+        <div class="container text-center">
+            <h2>📚 Repository</h2>
+            <p>You can find the complete project in the repository: <a href="https://github.com/argadepp/argocd-demo.git" target="_blank">argocd-demo.git</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 DevSecOps Insights with Pratik Argade - All Rights Reserved</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
