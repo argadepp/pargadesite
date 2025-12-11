@@ -1,0 +1,127 @@
+/* ---------- Global ---------- */
+:root{
+  --bg:#f6f8fb;
+  --dark:#0d1b2a;
+  --accent:#1d4ed8;
+  --muted:#6b7280;
+  --card:#ffffff;
+  --radius:12px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: #111827;
+  margin:0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* NAV */
+.navbar-brand { letter-spacing: .2px; }
+.link-plain { color: #d1e8ff; text-decoration:none; }
+.link-plain:hover { text-decoration: underline; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(120deg, rgba(29,78,216,0.95), rgba(2,132,199,0.9));
+  color: #fff;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+.hero .accent { color: #ffe082; }
+
+/* PROFILE CARD in hero */
+.profile-card {
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.profile-img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  margin-top: -56px;
+  border-radius: 16px;
+  border: 6px solid rgba(255,255,255,0.08);
+}
+
+/* FEATURES */
+.feature-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.feature-card:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(2,6,23,0.08); }
+
+/* ABOUT */
+.profile-img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  margin-top: 0;
+  border-radius: 16px;
+  border: 6px solid rgba(255,255,255,0.08);
+}
+
+.badge {
+  font-weight: 600;
+}
+
+/* CARDS & CERTS */
+.card { border: none; border-radius: 12px; }
+.certifications .card { min-height: 150px; display:flex; align-items:center; justify-content:center; }
+
+/* FOOTER */
+.footer { border-top: 1px solid rgba(255,255,255,0.04); }
+
+/* RESPONSIVE TWEAKS */
+@media (max-width: 991px) {
+  .profile-card { display:none; } /* hide hero profile on small screens */
+  .profile-img-lg { margin: 0 auto 20px; display:block; }
+}
+
+/* Tools Section */
+.tool-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.09);
+}
+
+.tool-img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+/* Local certification badges */
+.certifications-local .cert-card {
+  background: var(--card);
+  border-radius: 12px;
+  transition: transform .12s ease, box-shadow .12s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.certifications-local .cert-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+}
+
+.cert-img {
+  width: 140px;       /* adjust size if you want them smaller/larger */
+  height: 140px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}

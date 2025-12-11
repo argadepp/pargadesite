@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog — Pratik Argade</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav3">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="nav3">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <h2 class="mb-4">Blog</h2>
+
+    <div class="row g-4">
+      <!-- Example blog card -->
+      <div class="col-md-6 col-lg-4">
+        <article class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Running Grafana & Loki on KIND</h5>
+            <p class="card-text">A step-by-step guide to running Grafana, Loki and Prometheus on a local KIND cluster for observability PoCs.</p>
+            <a href="#" class="stretched-link text-decoration-none">Read more →</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <article class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Terraform + Atlantis Best Practices</h5>
+            <p class="card-text">How to integrate Atlantis with Jenkins pipelines securely for Terraform IaC reviews and automation.</p>
+            <a href="#" class="stretched-link text-decoration-none">Read more →</a>
+          </div>
+        </article>
+      </div>
+  <!-- Blog Section -->
+  <section id="blog" class="content-section bg-light">
+    <div class="container">
+      <h2 class="text-center">Latest Blog Posts</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Introduction to DevSecOps</h5>
+              <p class="card-text">Discover the basics of DevSecOps and its importance in modern development.</p>
+              <a href="blogs/devsecops-intro.html" class="btn btn-primary">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Devops Interview Question</h5>
+              <p class="card-text">Discover interview questions to prepare.</p>
+              <a href="blogs/interview-questions.html" class="btn btn-primary">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Implementing CI/CD with GitHub Actions</h5>
+              <p class="card-text">Step-by-step guide to creating CI/CD workflows using GitHub Actions.</p>
+              <a href="#" class="btn btn-primary">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Monitoring with Grafana</h5>
+              <p class="card-text">Learn how to set up dashboards and monitor applications using Grafana with Loki.</p>
+              <a href="blogs/kubernetes-demo.html" class="btn btn-primary">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card mb-7">
+        <div class="card-body">
+          <h5 class="card-title">Deploy thanos</h5>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/5KM1k2BXH3Y?si=lmkPZTBr6XbQO8HH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </section>
+      <!-- Add more cards as needed -->
+    </div>
+  </main>
+
+  <footer class="footer bg-dark text-white py-4">
+    <div class="container text-center">
+      <small>© 2025 Pratik Argade — Senior DevOps Engineer</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
