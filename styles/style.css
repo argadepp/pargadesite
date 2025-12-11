@@ -63,7 +63,8 @@ body {
   width: 220px;
   height: 220px;
   object-fit: cover;
-  margin-top: 0;
+  margin-top: 10px;
+  margin-bottom: 0;
   border-radius: 16px;
   border: 6px solid rgba(255,255,255,0.08);
 }
