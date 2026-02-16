@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building a Kafka Cluster with Schema Registry — Pratik Argade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/style.css" />
+  <style>
+    .content-section { padding: 2rem 0; }
+    .arch-block { background: var(--card); border-radius: var(--radius); padding: 1.25rem; margin: 1rem 0; }
+    .flow-step { margin: 1rem 0; padding-left: 1rem; border-left: 3px solid var(--accent); }
+    table.ResponsibilityTable { width: 100%; border-collapse: collapse; }
+    table.ResponsibilityTable th, table.ResponsibilityTable td { padding: 0.75rem; border: 1px solid #dee2e6; text-align: left; }
+    table.ResponsibilityTable th { background: #f8f9fa; }
+    pre.schema-flow { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: var(--radius); overflow-x: auto; }
+    .arch-diagram { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html">Pratik Argade</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="../blog.html">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero py-5">
+    <div class="container">
+      <h1 class="display-6 fw-bold">Building a Production-Style Kafka Cluster with Schema Registry</h1>
+      <p class="lead mb-0">Apache Kafka (3-node KRaft), Confluent Schema Registry, AKHQ, and Python producer/consumer — event streaming with schema governance.</p>
+    </div>
+  </header>
+
+  <main class="container py-4">
+
+    <section class="content-section">
+      <p>
+        Modern distributed systems rely heavily on event streaming for decoupled communication,
+        scalability, and real-time processing. In this post, I demonstrate a production-style
+        event streaming architecture built using:
+      </p>
+      <ul>
+        <li><strong>Apache Kafka</strong> — 3-node KRaft cluster (no ZooKeeper)</li>
+        <li><strong>Confluent Schema Registry</strong> — centralized schema governance</li>
+        <li><strong>AKHQ</strong> — cluster monitoring UI</li>
+        <li><strong>Python Producer</strong> — log shipper simulation</li>
+        <li><strong>Python Consumer</strong> — log ingestor simulation</li>
+      </ul>
+      <p class="mb-0">
+        This setup demonstrates how distributed durability and schema governance work together
+        to build reliable real-time data pipelines.
+      </p>
+    </section>
+  
+    <section class="content-section">
+      <h2>Architecture Overview</h2>
+  
+      <div class="arch-block">
+        <pre class="schema-flow">
+  Producer (Log Shipper)
+          │
+          │ 1. Register Schema
+          ▼
+  Schema Registry
+          │
+          │ 2. Send (Schema ID + Avro Payload)
+          ▼
+  Kafka Cluster (3 Brokers - KRaft)
+          │
+          │ 3. Replicated & Partitioned Storage
+          ▼
+  Consumer (Log Ingestor)
+          │
+          │ 4. Fetch Schema by ID → Deserialize
+        </pre>
+      </div>
+  
+      <p>
+        The key idea: <strong>Kafka stores bytes, not schemas.</strong>
+        Schema Registry ensures structure, validation, and compatibility.
+      </p>
+    </section>
+  
+    <section class="content-section bg-light">
+      <h2>Infrastructure Design</h2>
+  
+      <p>This environment uses a distributed Kafka cluster running in KRaft mode.</p>
+  
+      <ul>
+        <li>3 brokers: <code>kafka1</code>, <code>kafka2</code>, <code>kafka3</code></li>
+        <li>Controller quorum enabled</li>
+        <li>Replication factor: 3</li>
+        <li>3 partitions per topic</li>
+        <li>Internal + external listeners configured</li>
+        <li>AKHQ connected internally for monitoring</li>
+      </ul>
+  
+      <p class="mb-0">
+        This design mimics real production deployments used in large-scale microservices systems.
+      </p>
+    </section>
+  
+    <section class="content-section">
+      <h2>End-to-End Data Flow Explained</h2>
+  
+      <h5>1️⃣ Schema Registration</h5>
+      <div class="flow-step">
+        <p>
+          When the producer starts, it sends its Avro schema to Schema Registry.
+          The registry stores it under a subject (e.g., <code>app-logs-value</code>)
+          and assigns a unique Schema ID.
+        </p>
+      </div>
+  
+      <h5>2️⃣ Message Production</h5>
+      <div class="flow-step">
+        <p>
+          Instead of sending the full schema with every message,
+          the producer sends:
+        </p>
+        <pre class="schema-flow">[magic byte][schema ID][serialized avro payload]</pre>
+        <p>
+          Kafka simply stores this as raw bytes inside topic partitions.
+        </p>
+      </div>
+  
+      <h5>3️⃣ Replication & Partitioning</h5>
+      <div class="flow-step">
+        <p>
+          Because replication factor is 3, each message is copied across
+          all brokers. Partitioning allows horizontal scalability,
+          while replication ensures durability and fault tolerance.
+        </p>
+      </div>
+  
+      <h5>4️⃣ Safe Deserialization</h5>
+      <div class="flow-step">
+        <p>
+          The consumer extracts the Schema ID, calls Schema Registry,
+          fetches the correct schema version, and safely deserializes
+          the message into structured data.
+        </p>
+      </div>
+    </section>
+  
+    <section class="content-section bg-light">
+      <h2>Why Schema Registry Is Critical</h2>
+  
+      <p><strong>Without Schema Registry:</strong></p>
+      <ul>
+        <li>No schema validation</li>
+        <li>No version management</li>
+        <li>No compatibility enforcement</li>
+        <li>High risk of breaking consumers during deployments</li>
+      </ul>
+  
+      <p><strong>With Schema Registry:</strong></p>
+      <ul>
+        <li>Versioned schemas per subject</li>
+        <li>Backward, forward, and full compatibility checks</li>
+        <li>Independent service deployments</li>
+        <li>Safe schema evolution at scale</li>
+      </ul>
+  
+      <p class="mb-0">
+        In large distributed systems, schema governance prevents production outages.
+      </p>
+    </section>
+  
+    <section class="content-section">
+      <h2>Observability with AKHQ</h2>
+  
+      <p>AKHQ allows you to visualize:</p>
+      <ul>
+        <li>Topic configuration</li>
+        <li>Partition leadership</li>
+        <li>Replica distribution</li>
+        <li>Consumer groups & offsets</li>
+        <li>Lag monitoring</li>
+      </ul>
+  
+      <p class="mb-0">
+        This provides operational visibility into cluster health and data flow.
+      </p>
+    </section>
+  
+    <section class="content-section bg-light">
+      <h2>Component Responsibility Breakdown</h2>
+  
+      <table class="ResponsibilityTable">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Responsibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Producer</td><td>Publishes structured events</td></tr>
+          <tr><td>Schema Registry</td><td>Manages schema lifecycle and compatibility</td></tr>
+          <tr><td>Kafka Cluster</td><td>Stores, partitions, and replicates data</td></tr>
+          <tr><td>Consumer</td><td>Processes and deserializes events</td></tr>
+          <tr><td>AKHQ</td><td>Cluster monitoring and inspection</td></tr>
+        </tbody>
+      </table>
+    </section>
+  
+    <section class="content-section">
+      <h2>Production Characteristics</h2>
+  
+      <ul>
+        <li>Modern KRaft architecture (no ZooKeeper)</li>
+        <li>Multi-broker fault tolerance</li>
+        <li>Replication factor greater than 1</li>
+        <li>Schema governance layer</li>
+        <li>Consumer group parallelism</li>
+        <li>Operational visibility</li>
+      </ul>
+  
+      <p class="mb-0">
+        This is no longer a simple Kafka demo — it represents a foundational
+        event streaming platform.
+      </p>
+    </section>
+  
+    <section class="content-section bg-light">
+      <h2>Key Takeaways</h2>
+  
+      <ul>
+        <li>Kafka stores bytes — not schemas.</li>
+        <li>Schema Registry protects your data contracts.</li>
+        <li>Replication ensures durability.</li>
+        <li>Partitioning enables scalability.</li>
+        <li>Consumer groups enable parallel processing.</li>
+      </ul>
+  
+      <p class="mb-0">
+        Event streaming is not just about moving data.
+        It is about maintaining safe, evolving data contracts at scale.
+      </p>
+    </section>
+  
+  </main>
+  
+
+  <footer class="footer bg-dark text-white py-4">
+    <div class="container text-center">
+      <small>© 2025 Pratik Argade — Senior DevOps Engineer</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

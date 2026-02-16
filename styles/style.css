@@ -158,3 +158,21 @@ a:hover{color:var(--accent-soft)}
   .profile-card{display:none}
   .profile-img-lg{margin:0 auto 20px;display:block}
 }
+
+/* Blog / article content */
+.profile-img-lg {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 6px solid rgba(255,255,255,0.08);
+}
+main pre code,
+.content-section pre {
+  font-size: 0.9rem;
+}
+main code {
+  background: rgba(0,0,0,0.06);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
