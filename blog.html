@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav3">
@@ -28,86 +27,55 @@
     </div>
   </nav>
 
-  <main class="container py-5">
-    <h2 class="mb-4">Blog</h2>
-
-    <div class="row g-4">
-      <!-- Example blog card -->
-      <div class="col-md-6 col-lg-4">
-        <article class="card h-100 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">Running Grafana & Loki on KIND</h5>
-            <p class="card-text">A step-by-step guide to running Grafana, Loki and Prometheus on a local KIND cluster for observability PoCs.</p>
-            <a href="#" class="stretched-link text-decoration-none">Read more →</a>
-          </div>
-        </article>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <article class="card h-100 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">Terraform + Atlantis Best Practices</h5>
-            <p class="card-text">How to integrate Atlantis with Jenkins pipelines securely for Terraform IaC reviews and automation.</p>
-            <a href="#" class="stretched-link text-decoration-none">Read more →</a>
-          </div>
-        </article>
-      </div>
-  <!-- Blog Section -->
-  <section id="blog" class="content-section bg-light">
+  <header class="blog-hero py-5 mb-4">
     <div class="container">
-      <h2 class="text-center">Latest Blog Posts</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Introduction to DevSecOps</h5>
-              <p class="card-text">Discover the basics of DevSecOps and its importance in modern development.</p>
-              <a href="blogs/devsecops-intro.html" class="btn btn-primary">Read More</a>
-            </div>
+      <h1 class="display-6 fw-bold mb-2">Latest Blog Posts</h1>
+      <p class="mb-0 opacity-75">Practical DevOps content on Kubernetes, CI/CD, security and observability.</p>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    <div class="row g-4 mb-4">
+      <div class="col-md-6 col-lg-4">
+        <article class="blog-card h-100 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=1200&q=80" alt="DevSecOps concept">
+          <div class="p-4">
+            <h5>Introduction to DevSecOps</h5>
+            <p class="text-muted">Understand the DevSecOps mindset and how to shift security left in modern delivery pipelines.</p>
+            <a href="blogs/devsecops-intro.html" class="btn btn-primary btn-sm">Read More</a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Devops Interview Question</h5>
-              <p class="card-text">Discover interview questions to prepare.</p>
-              <a href="blogs/interview-questions.html" class="btn btn-primary">Read More</a>
-            </div>
+        </article>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <article class="blog-card h-100 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1200&q=80" alt="Interview preparation">
+          <div class="p-4">
+            <h5>DevOps Interview Questions</h5>
+            <p class="text-muted">Curated questions and practical pointers to prepare for DevOps engineering interviews.</p>
+            <a href="blogs/interview-questions.html" class="btn btn-primary btn-sm">Read More</a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Implementing CI/CD with GitHub Actions</h5>
-              <p class="card-text">Step-by-step guide to creating CI/CD workflows using GitHub Actions.</p>
-              <a href="#" class="btn btn-primary">Read More</a>
-            </div>
+        </article>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <article class="blog-card h-100 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1669023414162-5bb06bbff0ec?auto=format&fit=crop&w=1200&q=80" alt="Kubernetes monitoring dashboard">
+          <div class="p-4">
+            <h5>Monitoring with Grafana & Loki</h5>
+            <p class="text-muted">Build dashboards and log pipelines to monitor Kubernetes workloads more effectively.</p>
+            <a href="blogs/kubernetes-demo.html" class="btn btn-primary btn-sm">Read More</a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Monitoring with Grafana</h5>
-              <p class="card-text">Learn how to set up dashboards and monitor applications using Grafana with Loki.</p>
-              <a href="blogs/kubernetes-demo.html" class="btn btn-primary">Read More</a>
-            </div>
-          </div>
-        </div>
+        </article>
       </div>
     </div>
-    <div class="col-md-7">
-      <div class="card mb-7">
-        <div class="card-body">
-          <h5 class="card-title">Deploy thanos</h5>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/5KM1k2BXH3Y?si=lmkPZTBr6XbQO8HH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
+
+    <section class="video-wrap">
+      <div class="feature-card p-4">
+        <h4 class="mb-3">Featured Video: Deploy Thanos</h4>
+        <iframe src="https://www.youtube.com/embed/5KM1k2BXH3Y?si=lmkPZTBr6XbQO8HH" title="Deploy Thanos" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
-    </div>
-  </div>
-</div>
-  </section>
-      <!-- Add more cards as needed -->
-    </div>
+    </section>
   </main>
 
   <footer class="footer bg-dark text-white py-4">
