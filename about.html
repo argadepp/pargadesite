@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav2">
@@ -28,79 +27,65 @@
     </div>
   </nav>
 
-  <!-- ABOUT CONTENT -->
   <main class="container py-5">
+    <h2 class="section-title mb-4">About Me</h2>
     <div class="row g-4">
       <div class="col-lg-4 text-center">
         <img src="assets/PratikArgadeProfile.png" class="rounded profile-img-lg shadow-sm" alt="Pratik Argade" />
         <h3 class="mt-3">Pratik Pralhad Argade</h3>
         <p class="text-muted">Senior DevOps Engineer • 7.8 yrs</p>
-
         <a href="assets/PratikArgadeResume_10112025_v1.pdf" class="btn btn-primary btn-sm mt-2" target="_blank">Download Resume</a>
       </div>
 
       <div class="col-lg-8">
-        <h4>Short Bio</h4>
-        <p>
-          Strive to thrive in a fast-paced and evolving workplace, consistently improving organizational value while advancing personal expertise and supporting overall financial success. Bringing 7.7 years of experience as a DevOps Engineer.
-        </p>
-
-        <h4>Profile Summary</h4>
-        <ul>
-          <li>Senior DevOps Engineer with over 7.7 years of professional experience in DevOps, focusing on AWS and Azure Cloud Services.</li>
-          <li>Directed architectural design and execution of resilient AWS infrastructure using Terraform and Terragrunt.</li>
-          <li>Administered and enhanced Kubernetes workloads on EKS, integrating GitOps with ArgoCD.</li>
-          <li>Authored Python automation scripts for infrastructure tasks.</li>
-          <li>Integrated Jenkins pipelines with Atlantis for secure Terraform workflows.</li>
-          <li>Implemented cross-account AWS sharing, PrivateLink VPC endpoints, and Route53 hosted zones.</li>
-        </ul>
-
-        <h4 class="mt-3">Skills</h4>
-        <div class="mb-3">
-          <span class="badge bg-secondary me-1 mb-1">AWS</span>
-          <span class="badge bg-secondary me-1 mb-1">Azure</span>
-          <span class="badge bg-secondary me-1 mb-1">Terraform</span>
-          <span class="badge bg-secondary me-1 mb-1">Docker</span>
-          <span class="badge bg-secondary me-1 mb-1">Kubernetes</span>
-          <span class="badge bg-secondary me-1 mb-1">Jenkins</span>
-          <span class="badge bg-secondary me-1 mb-1">ArgoCD</span>
-          <span class="badge bg-secondary me-1 mb-1">Git</span>
-          <span class="badge bg-secondary me-1 mb-1">CloudFormation</span>
-          <span class="badge bg-secondary me-1 mb-1">GCP</span>
+        <div class="feature-card p-4 mb-4">
+          <h4>Short Bio</h4>
+          <p class="mb-0">
+            Striving to thrive in fast-paced environments by improving engineering value while growing expertise. I bring 7.7+ years of hands-on DevOps experience across cloud, IaC, CI/CD and reliability.
+          </p>
         </div>
 
-<h4>Certifications</h4>
-<p class="text-muted">Verified badges (downloaded)</p>
+        <div class="feature-card p-4 mb-4">
+          <h4>Profile Summary</h4>
+          <ul class="mb-0">
+            <li>Senior DevOps Engineer with 7.7+ years across AWS and Azure cloud services.</li>
+            <li>Designed and executed resilient AWS infrastructure using Terraform and Terragrunt.</li>
+            <li>Managed and enhanced EKS workloads with GitOps adoption through ArgoCD.</li>
+            <li>Authored Python automation scripts for infrastructure and operational workflows.</li>
+            <li>Integrated Jenkins pipelines with Atlantis for secure Terraform collaboration.</li>
+            <li>Implemented cross-account AWS sharing, PrivateLink VPC endpoints and Route53 hosted zones.</li>
+          </ul>
+        </div>
 
-<div class="row g-3 certifications-local">
-  <!-- AWS badge -->
-  <div class="col-6 col-md-4 col-lg-3">
-    <div class="cert-card text-center p-3 h-100">
-      <a href="https://www.credly.com/badges/5592eeda-1c3a-4739-b794-953e3d9f2d13/public_url" target="_blank" rel="noopener noreferrer">
-        <img src="assets/aws.png" alt="AWS Certification Badge" class="cert-img mx-auto d-block" />
-      </a>
-      <h6 class="mt-2">AWS Certified Solutions Architect – Associate</h6>
-      <!-- Optional small verification link if you have the Credly verify URL -->
-      <!-- <a href="https://www.credly.com/badges/ID/verify" target="_blank" class="small text-muted">Verify</a> -->
-    </div>
-  </div>
+        <h4 class="mt-3">Skills</h4>
+        <div class="mb-4 skills">
+          <span class="badge me-1 mb-1">AWS</span><span class="badge me-1 mb-1">Azure</span><span class="badge me-1 mb-1">Terraform</span>
+          <span class="badge me-1 mb-1">Docker</span><span class="badge me-1 mb-1">Kubernetes</span><span class="badge me-1 mb-1">Jenkins</span>
+          <span class="badge me-1 mb-1">ArgoCD</span><span class="badge me-1 mb-1">Git</span><span class="badge me-1 mb-1">CloudFormation</span>
+          <span class="badge me-1 mb-1">GCP</span>
+        </div>
 
-  <!-- GCP badge -->
-  <div class="col-6 col-md-4 col-lg-3">
-    <div class="cert-card text-center p-3 h-100">
-      <a href="https://www.credly.com/badges/343f0be2-22aa-4248-9e2c-83023214a271/public_url" target="_blank" rel="noopener noreferrer">
-        <img src="assets/gcp.png" alt="GCP Certification Badge" class="cert-img mx-auto d-block" />
-      </a>
-      <h6 class="mt-2">GCP Associate Cloud Engineer Certification</h6>
-    </div>
-  </div>
+        <h4>Certifications</h4>
+        <p class="text-muted">Verified badges</p>
+        <div class="row g-3 certifications-local">
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="cert-card text-center p-3 h-100">
+              <a href="https://www.credly.com/badges/5592eeda-1c3a-4739-b794-953e3d9f2d13/public_url" target="_blank" rel="noopener noreferrer">
+                <img src="assets/aws.png" alt="AWS Certification Badge" class="cert-img" />
+              </a>
+              <h6 class="mt-2">AWS Solutions Architect – Associate</h6>
+            </div>
+          </div>
 
-  <!-- Add more badges by copying a block and changing the image/file name -->
-</div>
-
-
-        <!-- IMPORTANT: Credly embed script (HTTPS) -->
-        <script type="text/javascript" async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="cert-card text-center p-3 h-100">
+              <a href="https://www.credly.com/badges/343f0be2-22aa-4248-9e2c-83023214a271/public_url" target="_blank" rel="noopener noreferrer">
+                <img src="assets/gcp.png" alt="GCP Certification Badge" class="cert-img" />
+              </a>
+              <h6 class="mt-2">GCP Associate Cloud Engineer</h6>
+            </div>
+          </div>
+        </div>
 
         <h4 class="mt-4">Connect</h4>
         <p>
