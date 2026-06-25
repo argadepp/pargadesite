@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kubernetes Gateway API with k3d — A Hands-On Guide</title>
+<title>Kubernetes Gateway API with k3d — Complete Hands-On Guide</title>
 <style>
   :root {
     --bg: #0d1117;
@@ -20,7 +20,6 @@
     --warning: #d29922;
     --purple: #bc8cff;
     --code-bg: #161b22;
-    --pill-bg: #1f2937;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,6 +30,53 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.75;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(13,17,23,0.94);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-nav {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .site-brand {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .site-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .site-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color .2s ease;
+  }
+
+  .site-links a:hover,
+  .site-links a.active {
+    color: var(--accent);
   }
 
   .hero {
@@ -72,7 +118,7 @@
     font-weight: 700;
     line-height: 1.2;
     color: #fff;
-    max-width: 760px;
+    max-width: 800px;
     margin: 0 auto 20px;
     letter-spacing: -0.02em;
   }
@@ -81,8 +127,8 @@
 
   .hero-sub {
     color: var(--muted);
-    font-size: 18px;
-    max-width: 580px;
+    font-size: 17px;
+    max-width: 620px;
     margin: 0 auto 36px;
   }
 
@@ -90,12 +136,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 20px;
     font-size: 13px;
     color: var(--muted);
+    flex-wrap: wrap;
   }
-
-  .hero-meta span { display: flex; align-items: center; gap: 6px; }
 
   .dot { width: 4px; height: 4px; background: var(--border); border-radius: 50%; }
 
@@ -111,16 +156,16 @@
     letter-spacing: 0.05em;
   }
 
-  .pill.amber {
-    background: rgba(240,153,91,0.12);
-    border-color: rgba(240,153,91,0.35);
-    color: var(--accent3);
-  }
-
   .pill.blue {
     background: rgba(88,166,255,0.12);
     border-color: rgba(88,166,255,0.3);
     color: var(--accent);
+  }
+
+  .pill.amber {
+    background: rgba(240,153,91,0.12);
+    border-color: rgba(240,153,91,0.35);
+    color: var(--accent3);
   }
 
   .pill.purple {
@@ -129,8 +174,35 @@
     color: var(--purple);
   }
 
+  .poc-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .poc-badge {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .poc-badge .num {
+    color: var(--accent);
+    font-weight: 700;
+    font-family: 'SF Mono', monospace;
+    font-size: 11px;
+  }
+
   .container {
-    max-width: 820px;
+    max-width: 860px;
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -139,11 +211,8 @@
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 24px 28px;
-    margin: 48px auto;
-    max-width: 820px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 28px 32px;
+    margin: 48px 0;
   }
 
   .toc-title {
@@ -152,7 +221,21 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+  }
+
+  .toc-group { margin-bottom: 20px; }
+  .toc-group:last-child { margin-bottom: 0; }
+
+  .toc-group-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(88,166,255,0.15);
   }
 
   .toc ol {
@@ -160,7 +243,7 @@
     counter-reset: toc;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px 32px;
+    gap: 6px 32px;
   }
 
   .toc li {
@@ -177,43 +260,81 @@
     font-weight: 700;
     color: var(--accent);
     min-width: 24px;
-    font-variant-numeric: tabular-nums;
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-family: 'SF Mono', monospace;
   }
 
-  .toc a {
-    color: var(--text);
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-
+  .toc a { color: var(--text); text-decoration: none; }
   .toc a:hover { color: var(--accent); }
 
   .section {
-    padding: 56px 0;
+    padding: 60px 0;
     border-bottom: 1px solid var(--border);
   }
 
   .section:last-child { border-bottom: none; }
 
-  .step-header {
+  .poc-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px;
+    margin: 48px 0;
+  }
+
+  .poc-header {
     display: flex;
     align-items: flex-start;
     gap: 20px;
     margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .poc-num {
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'SF Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .poc-header-text h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .poc-header-text p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 32px 0 16px;
   }
 
   .step-num {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 11px;
+    font-family: 'SF Mono', monospace;
+    font-size: 10px;
     font-weight: 700;
-    color: var(--accent);
-    background: rgba(88,166,255,0.1);
-    border: 1px solid rgba(88,166,255,0.25);
-    border-radius: 6px;
-    padding: 4px 10px;
+    color: var(--accent2);
+    background: rgba(29,158,117,0.1);
+    border: 1px solid rgba(29,158,117,0.25);
+    border-radius: 5px;
+    padding: 3px 8px;
     white-space: nowrap;
-    margin-top: 4px;
+    margin-top: 3px;
   }
 
   h2 {
@@ -221,7 +342,6 @@
     font-weight: 700;
     color: #fff;
     letter-spacing: -0.02em;
-    line-height: 1.3;
   }
 
   h3 {
@@ -241,33 +361,39 @@
     height: 16px;
     background: var(--accent2);
     border-radius: 2px;
+    flex-shrink: 0;
   }
 
   p { color: #c9d1d9; margin-bottom: 16px; }
 
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--accent3);
+  }
+
   .callout {
-    background: var(--bg2);
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
     border-radius: 0 8px 8px 0;
-    padding: 16px 20px;
-    margin: 24px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
     font-size: 14px;
     color: var(--muted);
+    background: rgba(88,166,255,0.04);
   }
 
-  .callout.warning {
-    border-left-color: var(--warning);
-  }
-
-  .callout.success {
-    border-left-color: var(--success);
-  }
-
+  .callout.warning { border-left-color: var(--warning); background: rgba(210,153,34,0.04); }
+  .callout.success { border-left-color: var(--success); background: rgba(63,185,80,0.04); }
+  .callout.danger  { border-left-color: var(--danger);  background: rgba(248,81,73,0.04); }
   .callout strong { color: var(--text); }
 
   .code-block {
-    margin: 20px 0;
+    margin: 18px 0;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -284,33 +410,27 @@
   }
 
   .code-lang {
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-family: 'SF Mono', monospace;
     color: var(--muted);
     font-weight: 600;
     letter-spacing: 0.05em;
   }
 
-  .code-label {
-    color: var(--accent3);
-    font-size: 11px;
-    font-weight: 600;
-  }
+  .code-label { color: var(--accent3); font-size: 11px; font-weight: 600; }
 
   pre {
     background: var(--code-bg);
     padding: 20px;
     overflow-x: auto;
-    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-    font-size: 13.5px;
-    line-height: 1.6;
-    tab-size: 2;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.65;
   }
 
+  .cm { color: #8b949e; font-style: italic; }
   .kw { color: #ff7b72; }
   .str { color: #a5d6ff; }
-  .cm { color: #8b949e; font-style: italic; }
   .num { color: #79c0ff; }
-  .fn { color: #d2a8ff; }
   .key { color: #7ee787; }
   .val { color: #a5d6ff; }
 
@@ -319,10 +439,11 @@
     border: 1px solid rgba(63,185,80,0.2);
     border-radius: 8px;
     padding: 16px 20px;
-    margin: 16px 0;
+    margin: 14px 0;
     font-family: 'SF Mono', monospace;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--success);
+    line-height: 1.7;
   }
 
   .verify-block .label {
@@ -335,39 +456,39 @@
     margin-bottom: 8px;
   }
 
-  .arch-diagram {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 32px;
-    margin: 28px 0;
-    font-family: 'SF Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  .arch-diagram .node {
-    display: inline-block;
+  .arch-box {
     background: var(--bg3);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 16px;
-    color: var(--text);
+    border-radius: 10px;
+    padding: 28px;
+    margin: 20px 0;
+    font-family: 'SF Mono', monospace;
     font-size: 13px;
+    line-height: 2;
+    color: var(--muted);
+    overflow-x: auto;
   }
 
-  .arch-diagram .node.accent { border-color: rgba(88,166,255,0.5); color: var(--accent); }
-  .arch-diagram .node.green { border-color: rgba(63,185,80,0.4); color: var(--success); }
-  .arch-diagram .node.amber { border-color: rgba(210,153,34,0.4); color: var(--warning); }
+  .arch-box .node {
+    display: inline-block;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 3px 12px;
+    color: var(--text);
+    background: var(--bg2);
+    font-size: 12px;
+  }
 
-  .arch-diagram .arrow { color: var(--border); margin: 0 8px; }
+  .arch-box .node.blue  { border-color: rgba(88,166,255,0.5); color: var(--accent); background: rgba(88,166,255,0.05); }
+  .arch-box .node.green { border-color: rgba(63,185,80,0.4);  color: var(--success); background: rgba(63,185,80,0.05); }
+  .arch-box .node.amber { border-color: rgba(210,153,34,0.4); color: var(--warning); background: rgba(210,153,34,0.05); }
+  .arch-box .node.purple{ border-color: rgba(188,140,255,0.4);color: var(--purple);  background: rgba(188,140,255,0.05); }
+  .arch-box .node.red   { border-color: rgba(248,81,73,0.4);  color: var(--danger);  background: rgba(248,81,73,0.05); }
 
   .compare-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 24px 0;
+    margin: 20px 0;
     font-size: 14px;
   }
 
@@ -384,32 +505,30 @@
   }
 
   .compare-table td {
-    padding: 12px 16px;
+    padding: 11px 16px;
     border-bottom: 1px solid rgba(48,54,61,0.5);
     color: #c9d1d9;
-    vertical-align: top;
   }
 
   .compare-table tr:last-child td { border-bottom: none; }
-
-  .compare-table .feature { color: var(--muted); font-size: 13px; }
-  .compare-table .yes { color: var(--success); font-weight: 600; }
-  .compare-table .no { color: var(--danger); }
-  .compare-table .limited { color: var(--warning); }
+  .compare-table .yes    { color: var(--success); font-weight: 600; }
+  .compare-table .no     { color: var(--danger); }
+  .compare-table .limited{ color: var(--warning); }
+  .compare-table code    { font-size: 12px; }
 
   .troubleshoot {
     background: var(--bg2);
-    border: 1px solid var(--border);
+    border: 1px solid rgba(248,81,73,0.2);
     border-radius: 10px;
     overflow: hidden;
-    margin: 28px 0;
+    margin: 24px 0;
   }
 
   .troubleshoot-header {
     background: rgba(248,81,73,0.08);
     border-bottom: 1px solid rgba(248,81,73,0.2);
-    padding: 12px 20px;
-    font-size: 12px;
+    padding: 10px 20px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -417,57 +536,60 @@
   }
 
   .ts-item {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(48,54,61,0.5);
-    font-size: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(48,54,61,0.4);
+    font-size: 13.5px;
   }
 
   .ts-item:last-child { border-bottom: none; }
-
-  .ts-error {
-    font-family: 'SF Mono', monospace;
-    color: var(--danger);
-    font-size: 12.5px;
-    margin-bottom: 8px;
-  }
-
+  .ts-error { font-family: 'SF Mono', monospace; color: var(--danger); font-size: 12px; margin-bottom: 6px; }
   .ts-fix { color: var(--muted); }
   .ts-fix strong { color: var(--text); }
 
-  .next-steps {
+  .poc-summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
     margin: 28px 0;
   }
 
-  .next-card {
+  .poc-summary-card {
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 20px;
-    transition: border-color 0.2s;
+    padding: 18px;
   }
 
-  .next-card:hover { border-color: var(--accent); }
+  .poc-summary-card .icon { font-size: 22px; margin-bottom: 10px; }
+  .poc-summary-card h4 { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .poc-summary-card p  { font-size: 12px; color: var(--muted); margin: 0; }
 
-  .next-card-icon {
-    font-size: 20px;
-    margin-bottom: 12px;
+  .role-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
   }
 
-  .next-card h4 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-
-  .next-card p {
-    font-size: 13px;
+  .role-table th {
+    background: var(--bg3);
     color: var(--muted);
-    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
   }
+
+  .role-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(48,54,61,0.4);
+    color: #c9d1d9;
+  }
+
+  .role-table tr:last-child td { border-bottom: none; }
 
   .footer {
     background: var(--bg2);
@@ -479,25 +601,45 @@
   }
 
   @media (max-width: 600px) {
+    .site-nav { align-items: flex-start; flex-direction: column; }
+    .site-links { gap: 14px; }
     .toc ol { grid-template-columns: 1fr; }
     .hero h1 { font-size: 26px; }
-    .hero-meta { flex-direction: column; gap: 8px; }
-    .dot { display: none; }
+    .poc-section { padding: 24px 20px; }
+    .poc-summary { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
+<header class="site-header">
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="site-brand" href="../index.html">Pratik Argade</a>
+    <div class="site-links">
+      <a href="../index.html">Home</a>
+      <a href="../about.html">About</a>
+      <a class="active" href="../blog.html">Blog</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">Platform Engineering · Hands-On Guide</div>
+  <div class="hero-eyebrow">Platform Engineering · Complete Hands-On Guide</div>
   <h1>Kubernetes <span>Gateway API</span> with k3d on WSL</h1>
-  <p class="hero-sub">Move beyond Ingress — set up a local k3s cluster using k3d, install the Gateway API CRDs, and deploy a working HTTP route end to end.</p>
+  <p class="hero-sub">From zero to a production-grade traffic management setup — cluster creation, Gateway API CRDs, Traefik v3, and four real-world POCs covering the full Gateway API feature set.</p>
   <div class="hero-meta">
-    <span>k3d · k3s · Traefik v3 · Gateway API v1.5</span>
+    <span>k3d · k3s · Traefik v3.7 · Gateway API v1.5.1</span>
     <div class="dot"></div>
-    <span>~20 min setup</span>
+    <span>cert-manager v1.16</span>
     <div class="dot"></div>
-    <span><span class="pill">WSL2 / Linux</span></span>
+    <span>WSL2 / Linux</span>
+  </div>
+  <div class="poc-badges">
+    <div class="poc-badge"><span class="num">POC 01</span> Traffic Splitting</div>
+    <div class="poc-badge"><span class="num">POC 02</span> Path &amp; Header Routing</div>
+    <div class="poc-badge"><span class="num">POC 03</span> TLS + cert-manager</div>
+    <div class="poc-badge"><span class="num">POC 04</span> Multi-namespace</div>
   </div>
 </div>
 
@@ -506,18 +648,28 @@
   <!-- TOC -->
   <div class="toc">
     <div class="toc-title">Contents</div>
-    <ol>
-      <li><a href="#why">Why Gateway API over Ingress</a></li>
-      <li><a href="#prereqs">Prerequisites</a></li>
-      <li><a href="#install-k3d">Install k3d</a></li>
-      <li><a href="#create-cluster">Create the cluster</a></li>
-      <li><a href="#gateway-crds">Install Gateway API CRDs</a></li>
-      <li><a href="#traefik">Install Traefik v3</a></li>
-      <li><a href="#deploy-app">Deploy demo app</a></li>
-      <li><a href="#gateway-route">Gateway + HTTPRoute</a></li>
-      <li><a href="#test">Test it</a></li>
-      <li><a href="#troubleshoot">Troubleshooting</a></li>
-    </ol>
+    <div class="toc-group">
+      <div class="toc-group-label">Foundation</div>
+      <ol>
+        <li><a href="#why">Why Gateway API over Ingress</a></li>
+        <li><a href="#prereqs">Prerequisites</a></li>
+        <li><a href="#install-k3d">Install k3d</a></li>
+        <li><a href="#create-cluster">Create the cluster</a></li>
+        <li><a href="#gateway-crds">Install Gateway API CRDs</a></li>
+        <li><a href="#traefik">Install Traefik v3</a></li>
+        <li><a href="#deploy-app">Deploy demo app</a></li>
+        <li><a href="#gateway-route">Gateway + HTTPRoute</a></li>
+      </ol>
+    </div>
+    <div class="toc-group" style="margin-top:16px">
+      <div class="toc-group-label">POCs</div>
+      <ol style="counter-reset: toc 8">
+        <li><a href="#poc1">POC 1 — Traffic Splitting / Canary</a></li>
+        <li><a href="#poc2">POC 2 — Path &amp; Header Routing</a></li>
+        <li><a href="#poc3">POC 3 — TLS with cert-manager</a></li>
+        <li><a href="#poc4">POC 4 — Multi-namespace + ReferenceGrant</a></li>
+      </ol>
+    </div>
   </div>
 
   <!-- WHY -->
@@ -526,286 +678,133 @@
       <div class="step-num">WHY</div>
       <h2>Gateway API vs Ingress</h2>
     </div>
-    <p>Ingress has served us well, but it was designed when Kubernetes routing was simpler. It has no concept of roles, forces complex behaviour into annotations, and only speaks HTTP/HTTPS. Gateway API is the official successor — it's expressive, role-oriented, and supports TCP, TLS, gRPC, and HTTP natively.</p>
-
+    <p>Ingress has served us well, but it was designed when Kubernetes routing was simpler — it has no concept of roles, forces complex behaviour into annotations, and only speaks HTTP/HTTPS. Gateway API is the official successor — expressive, role-oriented, and protocol-aware.</p>
     <table class="compare-table">
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th>Ingress</th>
-          <th>Gateway API</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Feature</th><th>Ingress</th><th>Gateway API</th></tr></thead>
       <tbody>
-        <tr>
-          <td class="feature">Role separation (Infra / App / Route)</td>
-          <td class="no">✗ None</td>
-          <td class="yes">✓ First-class</td>
-        </tr>
-        <tr>
-          <td class="feature">Protocol support</td>
-          <td class="limited">HTTP / HTTPS only</td>
-          <td class="yes">HTTP, TCP, TLS, gRPC</td>
-        </tr>
-        <tr>
-          <td class="feature">Traffic splitting / canary</td>
-          <td class="limited">Annotation hacks</td>
-          <td class="yes">Native weights</td>
-        </tr>
-        <tr>
-          <td class="feature">Multi-namespace routing</td>
-          <td class="limited">Limited</td>
-          <td class="yes">ReferenceGrant</td>
-        </tr>
-        <tr>
-          <td class="feature">Conformance testing</td>
-          <td class="no">✗ None</td>
-          <td class="yes">✓ Official suite</td>
-        </tr>
-        <tr>
-          <td class="feature">Portability across controllers</td>
-          <td class="limited">Low — annotation-dependent</td>
-          <td class="yes">High — spec-driven</td>
-        </tr>
+        <tr><td>Role separation (Infra / App / Route)</td><td class="no">✗ None</td><td class="yes">✓ First-class</td></tr>
+        <tr><td>Protocol support</td><td class="limited">HTTP / HTTPS only</td><td class="yes">HTTP, TCP, TLS, gRPC</td></tr>
+        <tr><td>Traffic splitting / canary</td><td class="limited">Annotation hacks</td><td class="yes">Native weights</td></tr>
+        <tr><td>Multi-namespace routing</td><td class="limited">Limited</td><td class="yes">ReferenceGrant</td></tr>
+        <tr><td>Header-based routing</td><td class="limited">Controller-specific</td><td class="yes">Native spec</td></tr>
+        <tr><td>Portability across controllers</td><td class="no">Low — annotation-dependent</td><td class="yes">High — spec-driven</td></tr>
       </tbody>
     </table>
-
-    <div class="callout success">
-      <strong>Gateway API is GA since Kubernetes 1.28.</strong> It's not experimental — it's the future of Kubernetes traffic management and the direction the ecosystem is moving.
-    </div>
+    <div class="callout success"><strong>Gateway API is GA since Kubernetes 1.28.</strong> It's not experimental — it's the future of Kubernetes traffic management and where the entire ecosystem is heading.</div>
   </div>
 
   <!-- PREREQS -->
   <div class="section" id="prereqs">
-    <div class="step-header">
-      <div class="step-num">PREREQ</div>
-      <h2>Prerequisites</h2>
-    </div>
-    <p>You need these installed before starting. On WSL2 (Ubuntu), Docker Desktop should be running on Windows with WSL integration enabled.</p>
-
+    <div class="step-header"><div class="step-num">PREREQ</div><h2>Prerequisites</h2></div>
+    <p>You need Docker Desktop running on Windows with WSL2 integration enabled. On WSL2, verify these are accessible:</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">check versions</span>
-      </div>
-      <pre><span class="cm"># Verify Docker is accessible from WSL</span>
-docker --version
-<span class="cm"># Docker version 27.x.x or later</span>
-
-<span class="cm"># Verify kubectl is installed</span>
-kubectl version --client
-<span class="cm"># Client Version: v1.30+</span>
-
-<span class="cm"># Verify helm is installed</span>
-helm version
-<span class="cm"># version.BuildInfo{Version:"v3.15+"}</span></pre>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">verify tools</span></div>
+      <pre>docker --version    <span class="cm"># Docker 27.x+</span>
+kubectl version --client  <span class="cm"># v1.30+</span>
+helm version        <span class="cm"># v3.15+</span></pre>
     </div>
-
-    <div class="callout">
-      <strong>Docker Desktop on Windows:</strong> Go to Settings → Resources → WSL Integration and enable it for your Ubuntu distro. This lets WSL2 use the Docker daemon from Windows directly.
-    </div>
+    <div class="callout"><strong>Docker Desktop on Windows:</strong> Settings → Resources → WSL Integration → enable for your Ubuntu distro.</div>
   </div>
 
   <!-- INSTALL K3D -->
   <div class="section" id="install-k3d">
-    <div class="step-header">
-      <div class="step-num">STEP 01</div>
-      <h2>Install k3d</h2>
-    </div>
-    <p>k3d wraps k3s inside Docker containers, giving you a full Kubernetes cluster with proper port mapping to <code>localhost</code>. Unlike running k3s directly in WSL, networking just works.</p>
-
+    <div class="step-header"><div class="step-num">STEP 01</div><h2>Install k3d</h2></div>
+    <p>k3d wraps k3s inside Docker containers — you get a full Kubernetes cluster with proper port mapping to <code>localhost</code>. Unlike running k3s directly in WSL, networking just works.</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">install</span>
-      </div>
-      <pre><span class="cm"># Install k3d via official installer</span>
-curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-
-<span class="cm"># Verify</span>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">install</span></div>
+      <pre>curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 k3d version</pre>
     </div>
-
-    <div class="verify-block">
-      <div class="label">expected output</div>
-      k3d version v5.8.x<br>
-      k3s version v1.31.x (default)
-    </div>
+    <div class="verify-block"><div class="label">expected output</div>k3d version v5.8.x<br>k3s version v1.31.x (default)</div>
   </div>
 
   <!-- CREATE CLUSTER -->
   <div class="section" id="create-cluster">
-    <div class="step-header">
-      <div class="step-num">STEP 02</div>
-      <h2>Create the cluster</h2>
-    </div>
-    <p>We create the cluster with two key flags: port mappings so <code>localhost:8080</code> reaches the cluster, and Traefik disabled so we can install v3 fresh with Gateway API support.</p>
-
+    <div class="step-header"><div class="step-num">STEP 02</div><h2>Create the cluster</h2></div>
+    <p>We disable the default Traefik so we can install v3 fresh with Gateway API support, and map ports so <code>localhost:8080</code> and <code>localhost:8443</code> reach the cluster directly.</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">create cluster</span>
-      </div>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">create cluster</span></div>
       <pre>k3d cluster create gateway-demo \
   --port <span class="str">"8080:80@loadbalancer"</span> \
   --port <span class="str">"8443:443@loadbalancer"</span> \
   --k3s-arg <span class="str">"--disable=traefik@server:0"</span> \
   --agents <span class="num">1</span></pre>
     </div>
-
-    <h3>What each flag does</h3>
-
     <table class="compare-table">
-      <thead>
-        <tr><th>Flag</th><th>Purpose</th></tr>
-      </thead>
+      <thead><tr><th>Flag</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr>
-          <td><code>--port "8080:80@loadbalancer"</code></td>
-          <td>Maps <code>localhost:8080</code> on your machine to port 80 on the k3d loadbalancer container</td>
-        </tr>
-        <tr>
-          <td><code>--port "8443:443@loadbalancer"</code></td>
-          <td>Same for HTTPS — useful for TLS setups later</td>
-        </tr>
-        <tr>
-          <td><code>--disable=traefik@server:0</code></td>
-          <td>Skips the bundled Traefik v2 so we can install v3 with Helm</td>
-        </tr>
-        <tr>
-          <td><code>--agents 1</code></td>
-          <td>Adds one worker node (1 server + 1 agent = realistic local cluster)</td>
-        </tr>
+        <tr><td><code>--port "8080:80@loadbalancer"</code></td><td>Maps localhost:8080 to port 80 on the k3d loadbalancer</td></tr>
+        <tr><td><code>--port "8443:443@loadbalancer"</code></td><td>Maps localhost:8443 for HTTPS traffic</td></tr>
+        <tr><td><code>--disable=traefik@server:0</code></td><td>Skips bundled Traefik v2 so we install v3 via Helm</td></tr>
+        <tr><td><code>--agents 1</code></td><td>Adds one worker node for a realistic local setup</td></tr>
       </tbody>
     </table>
-
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">verify</span>
-      </div>
-      <pre>kubectl get nodes
-<span class="cm"># NAME                         STATUS   ROLES                  AGE
-# k3d-gateway-demo-server-0    Ready    control-plane,master   30s
-# k3d-gateway-demo-agent-0     Ready    &lt;none&gt;                 20s</span></pre>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">verify</span></div>
+      <pre>kubectl get nodes</pre>
     </div>
+    <div class="verify-block"><div class="label">expected output</div>NAME                         STATUS   ROLES                  AGE<br>k3d-gateway-demo-server-0    Ready    control-plane,master   30s<br>k3d-gateway-demo-agent-0     Ready    &lt;none&gt;                 20s</div>
   </div>
 
   <!-- GATEWAY CRDS -->
   <div class="section" id="gateway-crds">
-    <div class="step-header">
-      <div class="step-num">STEP 03</div>
-      <h2>Install Gateway API CRDs</h2>
-    </div>
-    <p>k3s does not ship Gateway API CRDs. We need to install them manually. Use <strong>v1.5.1</strong> — this is critical because Traefik v3.7+ requires exactly this version. Installing an older version (like v1.2.1) will cause Traefik to fail with <code>BackendTLSPolicy not found</code> errors and the GatewayClass will stay <code>Unknown</code> forever.</p>
-
-    <div class="callout warning">
-      <strong>Version mismatch is the #1 failure point.</strong> Always match the CRD version to what your Traefik chart requires. Traefik's Helm install notes will tell you the exact version needed.
-    </div>
-
+    <div class="step-header"><div class="step-num">STEP 03</div><h2>Install Gateway API CRDs</h2></div>
+    <p>k3s does not ship Gateway API CRDs. Install <strong>v1.5.1</strong> — this is critical. Traefik v3.7+ requires exactly this version. Installing an older version (like v1.2.1) causes the <code>BackendTLSPolicy not found</code> error and GatewayClass stays <code>Unknown</code> permanently.</p>
+    <div class="callout warning"><strong>Version mismatch is the #1 failure point.</strong> Always match the CRD version to what your Traefik chart requires. The Helm install notes will always tell you the exact version needed.</div>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">install CRDs</span>
-      </div>
-      <pre><span class="cm"># Standard channel — HTTPRoute, Gateway, GatewayClass, etc.</span>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">install CRDs v1.5.1</span></div>
+      <pre><span class="cm"># Standard channel — HTTPRoute, Gateway, GatewayClass, GRPCRoute</span>
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 
 <span class="cm"># Experimental channel — BackendTLSPolicy (required by Traefik v3.7+)</span>
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/experimental-install.yaml</pre>
     </div>
-
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">verify CRDs</span>
-      </div>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">verify</span></div>
       <pre>kubectl get crd | grep gateway.networking.k8s.io</pre>
     </div>
-
-    <div class="verify-block">
-      <div class="label">expected output</div>
-      backendtlspolicies.gateway.networking.k8s.io<br>
-      gatewayclasses.gateway.networking.k8s.io<br>
-      gateways.gateway.networking.k8s.io<br>
-      grpcroutes.gateway.networking.k8s.io<br>
-      httproutes.gateway.networking.k8s.io<br>
-      referencegrants.gateway.networking.k8s.io
-    </div>
+    <div class="verify-block"><div class="label">expected output</div>backendtlspolicies.gateway.networking.k8s.io<br>gatewayclasses.gateway.networking.k8s.io<br>gateways.gateway.networking.k8s.io<br>grpcroutes.gateway.networking.k8s.io<br>httproutes.gateway.networking.k8s.io<br>referencegrants.gateway.networking.k8s.io</div>
   </div>
 
   <!-- TRAEFIK -->
   <div class="section" id="traefik">
-    <div class="step-header">
-      <div class="step-num">STEP 04</div>
-      <h2>Install Traefik v3 with Gateway API</h2>
-    </div>
-    <p>We use Helm to install Traefik v3 with the <code>kubernetesGateway</code> provider explicitly enabled. This is what registers the <code>GatewayClass</code> and starts reconciling your Gateway resources.</p>
-
+    <div class="step-header"><div class="step-num">STEP 04</div><h2>Install Traefik v3 with Gateway API</h2></div>
+    <p>We install Traefik v3 via Helm with the <code>kubernetesGateway</code> provider explicitly enabled. This registers the GatewayClass and starts reconciling Gateway resources.</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">helm install</span>
-      </div>
-      <pre><span class="cm"># Add Traefik Helm repo</span>
-helm repo add traefik https://traefik.github.io/charts
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">helm install</span></div>
+      <pre>helm repo add traefik https://traefik.github.io/charts
 helm repo update
 
-<span class="cm"># Install Traefik with Gateway API provider enabled</span>
 helm install traefik traefik/traefik \
   --namespace kube-system \
   --set providers.kubernetesGateway.enabled=<span class="str">true</span> \
   --set gateway.enabled=<span class="str">true</span> \
   --set service.type=LoadBalancer</pre>
     </div>
-
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">verify</span>
-      </div>
-      <pre><span class="cm"># Wait for Traefik to be ready</span>
-kubectl rollout status deployment/traefik -n kube-system
-
-<span class="cm"># Check GatewayClass — should show Accepted: True</span>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">verify</span></div>
+      <pre>kubectl rollout status deployment/traefik -n kube-system
 kubectl get gatewayclass</pre>
     </div>
+    <div class="verify-block"><div class="label">expected output</div>NAME      CONTROLLER                      ACCEPTED   AGE<br>traefik   traefik.io/gateway-controller   <span style="color:#3fb950;font-weight:700">True</span>       45s</div>
 
-    <div class="verify-block">
-      <div class="label">expected output</div>
-      NAME      CONTROLLER                      ACCEPTED   AGE<br>
-      traefik   traefik.io/gateway-controller   <span style="color:#3fb950;font-weight:700">True</span>       45s
-    </div>
-
-    <div class="callout success">
-      <strong>Accepted: True</strong> means Traefik has registered itself as the controller for the <code>traefik</code> GatewayClass and is ready to reconcile Gateway resources.
-    </div>
-
-    <h3>Understand Traefik's port mapping</h3>
-    <p>This is the key insight for making routing work locally. Traefik's internal entrypoint for HTTP is <strong>port 8000</strong>, not port 80. Your Gateway listener must match this internal port.</p>
-
-    <div class="arch-diagram">
-      <div><span class="node accent">localhost:8080</span> <span style="color:#58a6ff">→</span> (k3d maps) <span style="color:#58a6ff">→</span> <span class="node">k3d loadbalancer :80</span></div>
-      <div style="margin: 8px 0; color: var(--border)">↓</div>
-      <div><span class="node amber">Traefik web entrypoint :8000</span> <span style="color:#30363d">← Gateway port must match this</span></div>
-      <div style="margin: 8px 0; color: var(--border)">↓</div>
+    <h3>The critical port mapping</h3>
+    <p>Traefik's internal HTTP entrypoint runs on <strong>port 8000</strong>, not port 80. Your Gateway listener must match this internal port — this is the most common mistake when starting out.</p>
+    <div class="arch-box" style="text-align:center">
+      <div><span class="node blue">localhost:8080</span> &nbsp;→ (k3d maps) →&nbsp; <span class="node">k3d loadbalancer :80</span></div>
+      <div style="color:var(--border);line-height:2.5">↓</div>
+      <div><span class="node amber">Traefik web entrypoint :8000</span> &nbsp;← Gateway <code>port:</code> must match this</div>
+      <div style="color:var(--border);line-height:2.5">↓</div>
       <div><span class="node green">HTTPRoute → Service → Pods</span></div>
     </div>
   </div>
 
   <!-- DEPLOY APP -->
   <div class="section" id="deploy-app">
-    <div class="step-header">
-      <div class="step-num">STEP 05</div>
-      <h2>Deploy the demo app</h2>
-    </div>
-    <p>We use <code>traefik/whoami</code> — a tiny Go server that reflects request headers and connection info. Perfect for verifying routing.</p>
-
+    <div class="step-header"><div class="step-num">STEP 05</div><h2>Deploy the demo app</h2></div>
+    <p>We use <code>traefik/whoami</code> — a tiny Go server that reflects request headers and connection info. Perfect for verifying routing behaviour.</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">yaml</span>
-        <span class="code-label">app.yaml</span>
-      </div>
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">app.yaml</span></div>
       <pre><span class="key">apiVersion</span>: <span class="val">v1</span>
 <span class="key">kind</span>: <span class="val">Namespace</span>
 <span class="key">metadata</span>:
@@ -843,12 +842,8 @@ kubectl get gatewayclass</pre>
   <span class="key">ports</span>:
   - <span class="key">port</span>: <span class="num">80</span></pre>
     </div>
-
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">apply</span>
-      </div>
+      <div class="code-header"><span class="code-lang">bash</span></div>
       <pre>kubectl apply -f app.yaml
 kubectl rollout status deployment/whoami -n demo</pre>
     </div>
@@ -856,17 +851,10 @@ kubectl rollout status deployment/whoami -n demo</pre>
 
   <!-- GATEWAY + HTTPROUTE -->
   <div class="section" id="gateway-route">
-    <div class="step-header">
-      <div class="step-num">STEP 06</div>
-      <h2>Create Gateway and HTTPRoute</h2>
-    </div>
-    <p>The Gateway defines <em>where</em> traffic enters. The HTTPRoute defines <em>where</em> it goes. These are separate objects owned by different teams in production — infrastructure owns the Gateway, the app team owns the HTTPRoute.</p>
-
+    <div class="step-header"><div class="step-num">STEP 06</div><h2>Gateway + HTTPRoute</h2></div>
+    <p>The Gateway defines <em>where</em> traffic enters. The HTTPRoute defines <em>where</em> it goes. These are intentionally separate objects — in production, platform owns the Gateway, app teams own the HTTPRoutes.</p>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">yaml</span>
-        <span class="code-label">gateway.yaml</span>
-      </div>
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">gateway.yaml</span></div>
       <pre><span class="key">apiVersion</span>: <span class="val">gateway.networking.k8s.io/v1</span>
 <span class="key">kind</span>: <span class="val">Gateway</span>
 <span class="key">metadata</span>:
@@ -876,22 +864,15 @@ kubectl rollout status deployment/whoami -n demo</pre>
   <span class="key">gatewayClassName</span>: <span class="val">traefik</span>
   <span class="key">listeners</span>:
   - <span class="key">name</span>: <span class="val">http</span>
-    <span class="key">port</span>: <span class="num">8000</span>       <span class="cm"># Traefik's internal web entrypoint — NOT 80</span>
+    <span class="key">port</span>: <span class="num">8000</span>  <span class="cm"># Traefik internal entrypoint — NOT 80</span>
     <span class="key">protocol</span>: <span class="val">HTTP</span>
     <span class="key">allowedRoutes</span>:
       <span class="key">namespaces</span>:
         <span class="key">from</span>: <span class="val">Same</span></pre>
     </div>
-
-    <div class="callout warning">
-      <strong>port: 8000, not 80.</strong> This is the most common mistake. The Gateway listener port must match Traefik's internal entrypoint port (<code>--entryPoints.web.address=:8000</code>), not the host-level port you use in curl.
-    </div>
-
+    <div class="callout warning"><strong>port: 8000, not 80.</strong> The Gateway listener port must match Traefik's internal web entrypoint address (<code>--entryPoints.web.address=:8000</code>), not the host-level port you use in curl.</div>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">yaml</span>
-        <span class="code-label">httproute.yaml</span>
-      </div>
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">httproute.yaml</span></div>
       <pre><span class="key">apiVersion</span>: <span class="val">gateway.networking.k8s.io/v1</span>
 <span class="key">kind</span>: <span class="val">HTTPRoute</span>
 <span class="key">metadata</span>:
@@ -910,164 +891,875 @@ kubectl rollout status deployment/whoami -n demo</pre>
     - <span class="key">name</span>: <span class="val">whoami</span>
       <span class="key">port</span>: <span class="num">80</span></pre>
     </div>
-
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">apply and verify</span>
-      </div>
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">apply + test</span></div>
       <pre>kubectl apply -f gateway.yaml
 kubectl apply -f httproute.yaml
-
-<span class="cm"># Check status of both resources</span>
 kubectl get gateway,httproute -n demo
 
-<span class="cm"># Gateway should show Programmed: True</span>
-kubectl describe gateway main-gateway -n demo</pre>
+curl http://localhost:8080</pre>
     </div>
-
-    <div class="verify-block">
-      <div class="label">expected output</div>
-      NAME                               CLASS     ADDRESS   PROGRAMMED   AGE<br>
-      gateway.gateway.networking.k8s.io/main-gateway   traefik             <span style="color:#3fb950;font-weight:700">True</span>         10s<br><br>
-      NAME                                            HOSTNAMES   AGE<br>
-      httproute.gateway.networking.k8s.io/whoami-route             10s
-    </div>
+    <div class="verify-block"><div class="label">expected response</div>Hostname: whoami-7d9d9d-xk2pq<br>IP: 10.42.1.8<br>GET / HTTP/1.1<br>Host: localhost:8080<br>X-Forwarded-Proto: http</div>
   </div>
 
-  <!-- TEST -->
-  <div class="section" id="test">
-    <div class="step-header">
-      <div class="step-num">STEP 07</div>
-      <h2>Test it</h2>
-    </div>
-
-    <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">curl test</span>
+  <!-- ===== POC 1 ===== -->
+  <div class="poc-section" id="poc1">
+    <div class="poc-header">
+      <div class="poc-num">POC 01</div>
+      <div class="poc-header-text">
+        <h2>Traffic Splitting / Canary</h2>
+        <p>Weighted backend routing — progressively shift traffic from stable to canary without any annotation hacks.</p>
       </div>
-      <pre><span class="cm"># Basic test — should return whoami response</span>
-curl http://localhost:8080
-
-<span class="cm"># With specific path</span>
-curl http://localhost:8080/api
-
-<span class="cm"># Verbose — see headers and routing info</span>
-curl -v http://localhost:8080</pre>
     </div>
 
-    <div class="verify-block">
-      <div class="label">expected response</div>
-      Hostname: whoami-7d9d9d-xk2pq<br>
-      IP: 127.0.0.1<br>
-      IP: 10.42.1.8<br>
-      RemoteAddr: 10.42.0.4:52310<br>
-      GET / HTTP/1.1<br>
-      Host: localhost:8080<br>
-      X-Forwarded-For: 172.19.0.1<br>
-      X-Forwarded-Host: localhost:8080<br>
-      X-Forwarded-Proto: http
-    </div>
-
-    <h3>Access Traefik dashboard</h3>
-    <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">dashboard</span>
+    <div class="arch-box" style="text-align:center">
+      <div><span class="node blue">localhost:8080</span></div>
+      <div style="color:var(--border)">↓</div>
+      <div><span class="node">HTTPRoute (weighted)</span></div>
+      <div style="line-height:1; margin:4px 0; color:var(--border)">┌────────┴────────┐</div>
+      <div style="display:flex;justify-content:center;gap:80px">
+        <div><span class="node green">whoami-v1 (80%)</span></div>
+        <div><span class="node amber">whoami-v2 (20%)</span></div>
       </div>
-      <pre>kubectl port-forward -n kube-system deploy/traefik 9000:9000</pre>
     </div>
-    <p>Open <strong>http://localhost:9000/dashboard/</strong> — you'll see your Gateway routes listed under HTTP Routers.</p>
+
+    <div class="step-header"><div class="step-num">STEP 1</div><h3 style="margin:0">Deploy whoami-v2</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-v2
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: whoami
+        version: v2
+    spec:
+      containers:
+      - name: whoami
+        image: traefik/whoami
+        args: ["--name", "whoami-v2"]   <span class="cm"># v2 identifies itself in response</span>
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-v2
+  namespace: demo
+spec:
+  selector:
+    app: whoami
+    version: v2
+  ports:
+  - port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 2</div><h3 style="margin:0">Update HTTPRoute with weighted backends</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-route
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: whoami      <span class="cm"># stable</span>
+      port: 80
+      weight: 80
+    - name: whoami-v2   <span class="cm"># canary</span>
+      port: 80
+      weight: 20
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 3</div><h3 style="margin:0">Verify the split</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">count distribution</span></div>
+      <pre><span class="cm"># Send 50 requests and count which version responds</span>
+for i in $(seq 1 50); do
+  curl -s http://localhost:8080 | grep "Name:"
+done | sort | uniq -c</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>  40   Name: whoami<br>  10   Name: whoami-v2</div>
+
+    <div class="step-header"><div class="step-num">STEP 4</div><h3 style="margin:0">Simulate canary promotion</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">progressive rollout</span></div>
+      <pre><span class="cm"># Promote to 50/50</span>
+kubectl patch httproute whoami-route -n demo --type=json \
+  -p='[
+    {"op":"replace","path":"/spec/rules/0/backendRefs/0/weight","value":50},
+    {"op":"replace","path":"/spec/rules/0/backendRefs/1/weight","value":50}
+  ]'
+
+<span class="cm"># Full promotion — 100% to v2</span>
+kubectl patch httproute whoami-route -n demo --type=json \
+  -p='[
+    {"op":"replace","path":"/spec/rules/0/backendRefs/0/weight","value":0},
+    {"op":"replace","path":"/spec/rules/0/backendRefs/1/weight","value":100}
+  ]'</pre>
+    </div>
+    <div class="callout success"><strong>vs Ingress:</strong> With nginx Ingress you needed <code>nginx.ingress.kubernetes.io/canary-weight: "20"</code> — a nginx-specific annotation that breaks on any other controller. Gateway API weights are controller-agnostic spec.</div>
+  </div>
+
+  <!-- ===== POC 2 ===== -->
+  <div class="poc-section" id="poc2">
+    <div class="poc-header">
+      <div class="poc-num">POC 02</div>
+      <div class="poc-header-text">
+        <h2>Path &amp; Header Based Routing</h2>
+        <p>Route traffic based on URL paths and HTTP headers — enabling feature flags, API versioning, and beta user targeting natively.</p>
+      </div>
+    </div>
+
+    <div class="arch-box">
+      <div>localhost:8080/v1/*  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;<span class="node green">whoami (stable)</span></div>
+      <div>localhost:8080/v2/*  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;<span class="node amber">whoami-v2 (canary)</span></div>
+      <div>localhost:8080/api/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;<span class="node green">whoami (stable)</span></div>
+      <div>Header: X-User: beta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;<span class="node amber">whoami-v2 (canary)</span></div>
+      <div>Header: X-Version: v2 + /api/* &nbsp;&nbsp;→ &nbsp;<span class="node amber">whoami-v2 (canary)</span></div>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 1</div><h3 style="margin:0">Path-based routing</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">path routing</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-route
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /v1
+    backendRefs:
+    - name: whoami
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /v2
+    backendRefs:
+    - name: whoami-v2
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+    - name: whoami
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: whoami
+      port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 2</div><h3 style="margin:0">Test path routing</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>curl -s http://localhost:8080/v1/health | grep "Name:"   <span class="cm"># → whoami</span>
+curl -s http://localhost:8080/v2/health | grep "Name:"   <span class="cm"># → whoami-v2</span>
+curl -s http://localhost:8080/api/users | grep "Name:"   <span class="cm"># → whoami</span>
+curl -s http://localhost:8080/         | grep "Name:"   <span class="cm"># → whoami</span></pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 3</div><h3 style="margin:0">Header-based routing</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">header routing</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-header-route
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+  rules:
+  - matches:
+    - headers:
+      - name: X-User
+        value: beta
+    backendRefs:
+    - name: whoami-v2
+      port: 80
+
+  - matches:
+    - headers:
+      - name: X-User
+        value: stable
+    backendRefs:
+    - name: whoami
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: whoami
+      port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 4</div><h3 style="margin:0">Test header routing</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>curl -s -H "X-User: beta"   http://localhost:8080 | grep "Name:"  <span class="cm"># → whoami-v2</span>
+curl -s -H "X-User: stable" http://localhost:8080 | grep "Name:"  <span class="cm"># → whoami</span>
+curl -s                     http://localhost:8080 | grep "Name:"  <span class="cm"># → whoami</span></pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 5</div><h3 style="margin:0">Combined path + header (AND logic)</h3></div>
+    <p>Both conditions must match — path AND header together. Useful for versioned API access per user segment.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">combined match</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-combined-route
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+      headers:
+      - name: X-Version
+        value: v2
+    backendRefs:
+    - name: whoami-v2
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+    - name: whoami
+      port: 80
+
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: whoami
+      port: 80
+EOF</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">test</span></div>
+      <pre>curl -s -H "X-Version: v2" http://localhost:8080/api/test | grep "Name:"  <span class="cm"># → whoami-v2</span>
+curl -s                    http://localhost:8080/api/test | grep "Name:"  <span class="cm"># → whoami</span>
+curl -s                    http://localhost:8080/        | grep "Name:"  <span class="cm"># → whoami</span></pre>
+    </div>
+    <div class="callout success"><strong>vs Ingress:</strong> nginx header routing needs <code>nginx.ingress.kubernetes.io/canary-by-header</code> — HAProxy has different annotations entirely. Gateway API header matches are portable across all conformant controllers.</div>
+  </div>
+
+  <!-- ===== POC 3 ===== -->
+  <div class="poc-section" id="poc3">
+    <div class="poc-header">
+      <div class="poc-num">POC 03</div>
+      <div class="poc-header-text">
+        <h2>TLS Termination with cert-manager</h2>
+        <p>HTTPS listener on the Gateway with a self-signed certificate issued by cert-manager, plus HTTP→HTTPS redirect.</p>
+      </div>
+    </div>
+
+    <div class="arch-box" style="text-align:center">
+      <div><span class="node blue">localhost:8443 (HTTPS)</span></div>
+      <div style="color:var(--border)">↓</div>
+      <div><span class="node">k3d loadbalancer :443</span></div>
+      <div style="color:var(--border)">↓</div>
+      <div><span class="node amber">Traefik — TLS terminated here ← cert from cert-manager Secret</span></div>
+      <div style="color:var(--border)">↓</div>
+      <div><span class="node green">HTTPRoute → whoami pods (plain HTTP)</span></div>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 1</div><h3 style="margin:0">Install cert-manager</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.3/cert-manager.yaml
+
+kubectl rollout status deployment/cert-manager -n cert-manager
+kubectl rollout status deployment/cert-manager-webhook -n cert-manager
+kubectl rollout status deployment/cert-manager-cainjector -n cert-manager
+
+kubectl get pods -n cert-manager</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 2</div><h3 style="margin:0">Create a self-signed ClusterIssuer</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-issuer
+spec:
+  selfSigned: {}
+EOF
+
+kubectl get clusterissuer</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>NAME                READY   AGE<br>selfsigned-issuer   True    10s</div>
+
+    <div class="step-header"><div class="step-num">STEP 3</div><h3 style="margin:0">Create a Certificate</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: whoami-tls
+  namespace: demo
+spec:
+  secretName: whoami-tls-secret
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  commonName: whoami.local
+  dnsNames:
+  - whoami.local
+  - localhost
+EOF
+
+<span class="cm"># Watch until READY = True</span>
+kubectl get certificate -n demo -w</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>NAME          READY   SECRET              AGE<br>whoami-tls    <span style="color:#3fb950;font-weight:700">True</span>    whoami-tls-secret   15s</div>
+
+    <div class="step-header"><div class="step-num">STEP 4</div><h3 style="margin:0">Add HTTPS listener to Gateway</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main-gateway
+  namespace: demo
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    port: 8000
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: Same
+
+  - name: https
+    port: 8443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: whoami-tls-secret
+        namespace: demo
+    allowedRoutes:
+      namespaces:
+        from: Same
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 5</div><h3 style="margin:0">Create HTTPS HTTPRoute</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-https-route
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+    sectionName: https         <span class="cm"># attach to HTTPS listener</span>
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: whoami
+      port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 6</div><h3 style="margin:0">Test HTTPS</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre><span class="cm"># -k skips cert verification (expected for self-signed)</span>
+curl -k https://localhost:8443
+
+<span class="cm"># See TLS handshake and cert details</span>
+curl -vk https://localhost:8443 2>&amp;1 | grep -E "subject|issuer|Name:"</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>* Server certificate:<br>*  subject: CN=whoami.local<br>*  issuer: CN=whoami.local<br>...<br>Name: whoami</div>
+
+    <div class="step-header"><div class="step-num">STEP 7</div><h3 style="margin:0">HTTP → HTTPS redirect</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span><span class="code-label">redirect filter</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami-http-redirect
+  namespace: demo
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: demo
+    sectionName: http
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
+EOF
+
+<span class="cm"># Test redirect</span>
+curl -v http://localhost:8080 2>&amp;1 | grep -E "301|Location"
+
+<span class="cm"># Follow redirect</span>
+curl -vkL http://localhost:8080 2>&amp;1 | grep "Name:"</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>&lt; HTTP/1.1 301 Moved Permanently<br>&lt; Location: https://localhost:8080/</div>
+  </div>
+
+  <!-- ===== POC 4 ===== -->
+  <div class="poc-section" id="poc4">
+    <div class="poc-header">
+      <div class="poc-num">POC 04</div>
+      <div class="poc-header-text">
+        <h2>Multi-Namespace Routing with ReferenceGrant</h2>
+        <p>The most production-realistic pattern — platform team owns the Gateway, app teams own their routes. ReferenceGrant is the explicit security boundary between namespaces.</p>
+      </div>
+    </div>
+
+    <div class="arch-box">
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <div style="border:1px solid var(--border);border-radius:8px;padding:16px 20px;min-width:180px">
+          <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:8px">infra namespace</div>
+          <div><span class="node blue">Gateway (main-gateway)</span></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:8px;padding:16px 20px;min-width:180px">
+          <div style="color:var(--success);font-size:11px;font-weight:700;margin-bottom:8px">team-a namespace</div>
+          <div><span class="node green">HTTPRoute /app-a</span></div>
+          <div style="margin-top:6px"><span class="node green">Service: app-a</span></div>
+          <div style="margin-top:6px"><span class="node green">ReferenceGrant ✓</span></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:8px;padding:16px 20px;min-width:180px">
+          <div style="color:var(--warning);font-size:11px;font-weight:700;margin-bottom:8px">team-b namespace</div>
+          <div><span class="node amber">HTTPRoute /app-b</span></div>
+          <div style="margin-top:6px"><span class="node amber">Service: app-b</span></div>
+          <div style="margin-top:6px"><span class="node amber">ReferenceGrant ✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout danger"><strong>Without ReferenceGrant, cross-namespace references are blocked by default.</strong> This is a deliberate security boundary — an HTTPRoute in team-a cannot reference a Gateway in infra unless team-a explicitly grants it.</div>
+
+    <div class="step-header"><div class="step-num">STEP 1</div><h3 style="margin:0">Create namespaces</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra
+  labels:
+    team: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-a
+  labels:
+    team: alpha
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-b
+  labels:
+    team: beta
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 2</div><h3 style="margin:0">Deploy Gateway in infra namespace</h3></div>
+    <p>Each listener gets a unique hostname — required because both share port 8000 and HTTP protocol. The <code>port + protocol + hostname</code> combination must be unique per listener.</p>
+    <div class="callout warning"><strong>Common error:</strong> <code>Combination of port, protocol and hostname must be unique for each listener.</code> If two listeners share port + protocol, they must differ by hostname. You cannot use the same port + protocol twice without unique hostnames.</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main-gateway
+  namespace: infra
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    port: 8000
+    protocol: HTTP
+    hostname: "team-a.local"      <span class="cm"># unique hostname makes this valid</span>
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            team: alpha
+  - name: http-b
+    port: 8000
+    protocol: HTTP
+    hostname: "team-b.local"      <span class="cm"># different hostname = unique combo</span>
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            team: beta
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 3</div><h3 style="margin:0">Deploy apps in team namespaces</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a
+  namespace: team-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-a
+  template:
+    metadata:
+      labels:
+        app: app-a
+    spec:
+      containers:
+      - name: whoami
+        image: traefik/whoami
+        args: ["--name", "app-a-team-alpha"]
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-a
+  namespace: team-a
+spec:
+  selector:
+    app: app-a
+  ports:
+  - port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: team-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+    spec:
+      containers:
+      - name: whoami
+        image: traefik/whoami
+        args: ["--name", "app-b-team-beta"]
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-b
+  namespace: team-b
+spec:
+  selector:
+    app: app-b
+  ports:
+  - port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 4</div><h3 style="margin:0">Create ReferenceGrants</h3></div>
+    <p>Each team explicitly grants the Gateway in <code>infra</code> permission to reference their services. The ReferenceGrant lives in the <em>target</em> namespace — the team that owns the resource decides who can reference it.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-infra-gateway
+  namespace: team-a       <span class="cm"># lives in TARGET namespace</span>
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: team-a
+  to:
+  - group: ""
+    kind: Service
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-infra-gateway
+  namespace: team-b
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: team-b
+  to:
+  - group: ""
+    kind: Service
+EOF
+
+kubectl get referencegrant -A</pre>
+    </div>
+    <div class="verify-block"><div class="label">expected output</div>NAMESPACE   NAME                   AGE<br>team-a      allow-infra-gateway    5s<br>team-b      allow-infra-gateway    5s</div>
+
+    <div class="step-header"><div class="step-num">STEP 5</div><h3 style="margin:0">Create HTTPRoutes in each team namespace</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">yaml</span></div>
+      <pre>kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-a-route
+  namespace: team-a
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: infra        <span class="cm"># cross-namespace ref to Gateway</span>
+    sectionName: http
+  hostnames:
+  - "team-a.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /app-a
+    backendRefs:
+    - name: app-a
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-b-route
+  namespace: team-b
+spec:
+  parentRefs:
+  - name: main-gateway
+    namespace: infra
+    sectionName: http-b
+  hostnames:
+  - "team-b.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /app-b
+    backendRefs:
+    - name: app-b
+      port: 80
+EOF</pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 6</div><h3 style="margin:0">Add hosts + test</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre><span class="cm"># Add hostnames to /etc/hosts</span>
+echo "127.0.0.1 team-a.local team-b.local" | sudo tee -a /etc/hosts
+
+<span class="cm"># Verify routes are accepted</span>
+kubectl describe httproute app-a-route -n team-a | grep -A5 "Parents"
+kubectl describe httproute app-b-route -n team-b | grep -A5 "Parents"
+
+<span class="cm"># Test routing</span>
+curl -s http://team-a.local:8080/app-a | grep "Name:"   <span class="cm"># → app-a-team-alpha</span>
+curl -s http://team-b.local:8080/app-b | grep "Name:"   <span class="cm"># → app-b-team-beta</span></pre>
+    </div>
+
+    <div class="step-header"><div class="step-num">STEP 7</div><h3 style="margin:0">Demonstrate the security boundary</h3></div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><span class="code-label">prove ReferenceGrant matters</span></div>
+      <pre><span class="cm"># Delete team-a's ReferenceGrant</span>
+kubectl delete referencegrant allow-infra-gateway -n team-a
+
+<span class="cm"># Route is now rejected</span>
+kubectl describe httproute app-a-route -n team-a | grep -A3 "Conditions"
+<span class="cm"># Reason: RefNotPermitted ← blocked without grant</span>
+
+<span class="cm"># Traffic fails</span>
+curl -s http://team-a.local:8080/app-a   <span class="cm"># → 404</span>
+
+<span class="cm"># Restore grant</span>
+kubectl apply -f - &lt;&lt;EOF
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-infra-gateway
+  namespace: team-a
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: team-a
+  to:
+  - group: ""
+    kind: Service
+EOF</pre>
+    </div>
+
+    <h3>Role ownership model</h3>
+    <table class="role-table">
+      <thead><tr><th>Resource</th><th>Owner</th><th>Namespace</th></tr></thead>
+      <tbody>
+        <tr><td><code>GatewayClass</code></td><td>Cluster admin</td><td>cluster-scoped</td></tr>
+        <tr><td><code>Gateway</code></td><td>Platform / infra team</td><td><code>infra</code></td></tr>
+        <tr><td><code>ReferenceGrant</code></td><td>App team (grants access inbound)</td><td><code>team-a</code>, <code>team-b</code></td></tr>
+        <tr><td><code>HTTPRoute</code></td><td>App team (owns their routes)</td><td><code>team-a</code>, <code>team-b</code></td></tr>
+        <tr><td><code>Service</code> / <code>Deployment</code></td><td>App team</td><td><code>team-a</code>, <code>team-b</code></td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- TROUBLESHOOT -->
   <div class="section" id="troubleshoot">
-    <div class="step-header">
-      <div class="step-num">DEBUG</div>
-      <h2>Troubleshooting</h2>
-    </div>
-
+    <div class="step-header"><div class="step-num">DEBUG</div><h2>Troubleshooting</h2></div>
     <div class="troubleshoot">
       <div class="troubleshoot-header">Common errors and fixes</div>
-
       <div class="ts-item">
         <div class="ts-error">GatewayClass ACCEPTED: Unknown</div>
-        <div class="ts-fix"><strong>Cause:</strong> CRD version mismatch or Gateway provider not enabled. <br>Run <code>kubectl logs -n kube-system deploy/traefik | grep -i gateway</code> to confirm. Install v1.5.1 CRDs and ensure <code>--providers.kubernetesgateway</code> is in Traefik's args.</div>
+        <div class="ts-fix"><strong>Cause:</strong> CRD version mismatch or Gateway provider not enabled. Install v1.5.1 CRDs (both standard + experimental) and ensure <code>--providers.kubernetesgateway</code> is in Traefik's args. Check: <code>kubectl logs -n kube-system deploy/traefik | grep -i gateway</code></div>
       </div>
-
-      <div class="ts-item">
-        <div class="ts-error">Cannot find entryPoint for Gateway: no matching entryPoint for port 80</div>
-        <div class="ts-fix"><strong>Cause:</strong> Gateway listener port set to 80 but Traefik's web entrypoint runs on 8000 internally. <br><strong>Fix:</strong> Change <code>port: 80</code> to <code>port: 8000</code> in your Gateway spec.</div>
-      </div>
-
       <div class="ts-item">
         <div class="ts-error">Failed to watch *v1.BackendTLSPolicy: the server could not find the requested resource</div>
-        <div class="ts-fix"><strong>Cause:</strong> Only standard CRDs installed — BackendTLSPolicy is in the experimental channel. <br><strong>Fix:</strong> Apply <code>experimental-install.yaml</code> from Gateway API v1.5.1 release.</div>
+        <div class="ts-fix"><strong>Cause:</strong> Only standard CRDs installed. <strong>Fix:</strong> Apply <code>experimental-install.yaml</code> from Gateway API v1.5.1.</div>
       </div>
-
       <div class="ts-item">
-        <div class="ts-error">curl: (7) Failed to connect to localhost port 8080</div>
-        <div class="ts-fix"><strong>Cause:</strong> k3d cluster not running or port mapping not set up. <br>Check <code>k3d cluster list</code> and <code>docker ps | grep k3d</code>. Recreate cluster with <code>--port "8080:80@loadbalancer"</code>.</div>
+        <div class="ts-error">Cannot find entryPoint for Gateway: no matching entryPoint for port 80</div>
+        <div class="ts-fix"><strong>Cause:</strong> Gateway listener set to port 80 but Traefik's web entrypoint is :8000 internally. <strong>Fix:</strong> Change Gateway <code>port: 80</code> to <code>port: 8000</code>.</div>
       </div>
-
+      <div class="ts-item">
+        <div class="ts-error">Combination of port, protocol and hostname must be unique for each listener</div>
+        <div class="ts-fix"><strong>Cause:</strong> Two listeners share the same port + protocol without unique hostnames. <strong>Fix:</strong> Add distinct <code>hostname:</code> fields to each listener (e.g. <code>team-a.local</code> and <code>team-b.local</code>).</div>
+      </div>
+      <div class="ts-item">
+        <div class="ts-error">HTTPRoute condition: RefNotPermitted</div>
+        <div class="ts-fix"><strong>Cause:</strong> Missing or deleted ReferenceGrant in the target namespace. <strong>Fix:</strong> Create a ReferenceGrant in the namespace that owns the Service being referenced.</div>
+      </div>
       <div class="ts-item">
         <div class="ts-error">404 page not found</div>
-        <div class="ts-fix"><strong>Cause:</strong> Route not attached to Gateway or Gateway not programmed. <br>Check <code>kubectl describe gateway main-gateway -n demo</code> for conditions. Ensure <code>parentRefs</code> in HTTPRoute points to the correct Gateway name and namespace.</div>
+        <div class="ts-fix"><strong>Cause:</strong> Route not attached to Gateway or Gateway not programmed. Check <code>kubectl describe gateway -n &lt;ns&gt;</code> for conditions. Ensure <code>parentRefs</code> in HTTPRoute matches the Gateway name, namespace, and <code>sectionName</code>.</div>
       </div>
     </div>
 
-    <h3>Useful debug commands</h3>
+    <h3>Debug toolkit</h3>
     <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">bash</span>
-        <span class="code-label">debug toolkit</span>
-      </div>
-      <pre><span class="cm"># Check Traefik is receiving Gateway events</span>
+      <div class="code-header"><span class="code-lang">bash</span></div>
+      <pre><span class="cm"># Traefik gateway events</span>
 kubectl logs -n kube-system deploy/traefik | grep -i "gateway\|error" | tail -20
 
-<span class="cm"># Check Gateway conditions</span>
-kubectl describe gateway main-gateway -n demo
+<span class="cm"># Gateway conditions</span>
+kubectl describe gateway main-gateway -n &lt;namespace&gt;
 
-<span class="cm"># Check HTTPRoute parent status</span>
-kubectl describe httproute whoami-route -n demo
+<span class="cm"># HTTPRoute parent attachment status</span>
+kubectl describe httproute &lt;name&gt; -n &lt;namespace&gt; | grep -A8 "Parents"
 
 <span class="cm"># Verify Traefik entrypoint ports</span>
 kubectl get pod -n kube-system -l app.kubernetes.io/name=traefik \
   -o jsonpath='{.items[0].spec.containers[0].args}' | tr ',' '\n'
 
-<span class="cm"># Confirm pods are running</span>
-kubectl get pods -n demo</pre>
+<span class="cm"># Check ReferenceGrant exists</span>
+kubectl get referencegrant -A</pre>
     </div>
   </div>
 
-  <!-- NEXT STEPS -->
+  <!-- SUMMARY -->
   <div class="section">
-    <div class="step-header">
-      <div class="step-num">NEXT</div>
-      <h2>What to explore next</h2>
-    </div>
-
-    <div class="next-steps">
-      <div class="next-card">
-        <div class="next-card-icon">⚖️</div>
-        <h4>Traffic splitting</h4>
-        <p>Add a canary deployment with weighted backendRefs — 80% stable, 20% v2. No annotation hacks needed.</p>
+    <div class="step-header"><div class="step-num">DONE</div><h2>What you built</h2></div>
+    <div class="poc-summary">
+      <div class="poc-summary-card">
+        <div class="icon">⚖️</div>
+        <h4>Traffic Splitting</h4>
+        <p>Weighted canary rollout with native spec — no annotation hacks, progressive promotion via patch.</p>
       </div>
-      <div class="next-card">
-        <div class="next-card-icon">🔒</div>
-        <h4>TLS with cert-manager</h4>
-        <p>Add a HTTPS listener to the Gateway, install cert-manager, and issue a self-signed cert for local dev.</p>
+      <div class="poc-summary-card">
+        <div class="icon">🔀</div>
+        <h4>Path &amp; Header Routing</h4>
+        <p>Path prefixes, header matching, and combined AND logic for API versioning and feature flags.</p>
       </div>
-      <div class="next-card">
-        <div class="next-card-icon">🌐</div>
-        <h4>Multi-namespace routing</h4>
-        <p>Use ReferenceGrant to allow an HTTPRoute in the <code>apps</code> namespace to attach to a Gateway in <code>infra</code>.</p>
+      <div class="poc-summary-card">
+        <div class="icon">🔒</div>
+        <h4>TLS + cert-manager</h4>
+        <p>HTTPS listener with self-signed cert, HTTP→HTTPS redirect filter, end-to-end TLS termination.</p>
       </div>
-      <div class="next-card">
-        <div class="next-card-icon">📊</div>
-        <h4>gRPC routes</h4>
-        <p>Deploy a gRPC service and use GRPCRoute — native protocol support without Ingress annotation workarounds.</p>
+      <div class="poc-summary-card">
+        <div class="icon">🏢</div>
+        <h4>Multi-namespace</h4>
+        <p>Platform-owned Gateway, team-owned routes, explicit ReferenceGrant security boundaries.</p>
       </div>
     </div>
   </div>
@@ -1075,8 +1767,8 @@ kubectl get pods -n demo</pre>
 </div>
 
 <div class="footer">
-  <p>Built with k3d · Traefik v3.7 · Gateway API v1.5.1 · Tested on WSL2 / Ubuntu</p>
-  <p style="margin-top: 8px; font-size: 12px; opacity: 0.6;">Gateway API is the future of Kubernetes traffic management — Ingress is legacy.</p>
+  <p>Built with k3d · Traefik v3.7 · Gateway API v1.5.1 · cert-manager v1.16 · Tested on WSL2 / Ubuntu</p>
+  <p style="margin-top:8px;font-size:12px;opacity:0.6">Gateway API is the future of Kubernetes traffic management — Ingress is legacy.</p>
 </div>
 
 </body>

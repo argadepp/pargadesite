@@ -1,13 +1,67 @@
-        <h2>Certifications</h2>
-        <div class="certifications">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Certifications - Pratik Argade</title>
 
-            <div class="badge">
-                <div data-iframe-width="150" data-iframe-height="270"
-                     data-share-badge-id="5592eeda-1c3a-4739-b794-953e3d9f2d13"
-                     data-share-badge-host="https://www.credly.com">
-                </div>
-            </div>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#certNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <div class="badge">
-               <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="343f0be2-22aa-4248-9e2c-83023214a271" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-            </div>
+      <div class="collapse navbar-collapse" id="certNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="blog-hero py-5 mb-4">
+    <div class="container">
+      <h1 class="display-6 fw-bold mb-2">Certifications</h1>
+      <p class="mb-0 opacity-75">Verified cloud certifications and professional badges.</p>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    <div class="row g-4 certifications-local">
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="cert-card text-center p-3 h-100">
+          <a href="https://www.credly.com/badges/5592eeda-1c3a-4739-b794-953e3d9f2d13/public_url" target="_blank" rel="noopener noreferrer">
+            <img src="assets/aws.png" alt="AWS Certification Badge" class="cert-img" />
+          </a>
+          <h6 class="mt-2">AWS Solutions Architect - Associate</h6>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="cert-card text-center p-3 h-100">
+          <a href="https://www.credly.com/badges/343f0be2-22aa-4248-9e2c-83023214a271/public_url" target="_blank" rel="noopener noreferrer">
+            <img src="assets/gcp.png" alt="GCP Certification Badge" class="cert-img" />
+          </a>
+          <h6 class="mt-2">GCP Associate Cloud Engineer</h6>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer bg-dark text-white py-4">
+    <div class="container text-center">
+      <small>&copy; 2025 Pratik Argade - Senior DevOps Engineer</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

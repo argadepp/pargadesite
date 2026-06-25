@@ -7,21 +7,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    h1 { text-align: center; color: #1a73e8; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d1117; color: #e6edf3; padding: 20px; line-height: 1.7; }
+    .container { max-width: 850px; margin: auto; background: #161b22; padding: 30px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 16px 40px rgba(0,0,0,0.28); }
+    h1 { text-align: center; color: #58a6ff; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; }
-    label { font-weight: 600; font-size: 14px; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
+    label { font-weight: 600; font-size: 14px; color: #c9d1d9; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #30363d; border-radius: 6px; margin-top: 5px; background: #0d1117; color: #e6edf3; }
+    input:focus, select:focus { outline: 2px solid rgba(88,166,255,0.35); border-color: #58a6ff; }
     table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 12px; border: 1px solid #dee2e6; text-align: center; }
-    th { background: #f8f9fa; }
+    th, td { padding: 12px; border: 1px solid #30363d; text-align: center; }
+    th { background: #21262d; color: #8b949e; }
     .actions { margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
     button { padding: 12px 24px; cursor: pointer; border: none; border-radius: 6px; font-weight: bold; }
-    .add { background: #e8f0fe; color: #1a73e8; }
-    .pdf { background: #34a853; color: #fff; }
+    .add { background: rgba(88,166,255,0.12); color: #58a6ff; border: 1px solid rgba(88,166,255,0.35); }
+    .pdf { background: #1d9e75; color: #fff; }
     .total { margin-top: 20px; font-size: 20px; font-weight: bold; text-align: right; }
-    #loadingMsg { color: #d93025; font-weight: bold; display: none; }
+    #loadingMsg { color: #f85149; font-weight: bold; display: none; }
   </style>
 </head>
 <body>
