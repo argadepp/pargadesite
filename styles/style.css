@@ -121,6 +121,89 @@ a:hover{color:var(--accent-soft)}
 .blog-card .btn{border-radius:999px}
 .video-wrap iframe{width:100%;min-height:320px;border-radius:12px;border:1px solid var(--border)}
 
+.migration-hero{
+  background:
+    linear-gradient(135deg, rgba(13,17,23,.88), rgba(15,38,68,.9)),
+    url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1800&q=80") center/cover;
+  color:var(--text);
+  padding:80px 0;
+  border-bottom:1px solid var(--border);
+}
+.eyebrow{
+  display:inline-block;
+  margin-bottom:14px;
+  color:var(--accent-soft);
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.migration-scorecard,.migration-flow,.migration-card{
+  background:rgba(22,27,34,.88);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 20px 45px rgba(0,0,0,.28);
+}
+.migration-scorecard{padding:24px}
+.score-row{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:12px 0;
+  border-top:1px solid var(--border);
+}
+.score-row span{color:var(--muted)}
+.migration-flow{padding:24px}
+.flow-node{
+  display:flex;
+  gap:18px;
+  padding:18px 0;
+  border-bottom:1px solid var(--border);
+}
+.flow-node:last-child{border-bottom:0}
+.flow-node span,.r-badge{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(88,166,255,.14);
+  color:var(--accent-soft);
+  border:1px solid rgba(88,166,255,.36);
+  font-weight:800;
+}
+.flow-node h3,.migration-card h3{font-size:1.1rem;margin-bottom:6px}
+.flow-node p,.migration-card p{margin-bottom:0}
+.migration-card{
+  padding:24px;
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.migration-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(88,166,255,.42);
+  box-shadow:0 18px 38px rgba(0,0,0,.32);
+}
+.migration-card .r-badge{margin-bottom:18px}
+.migration-card .example{
+  margin-top:16px;
+  color:#c9d1d9;
+}
+.migration-table{
+  color:var(--text);
+  border-color:var(--border);
+}
+.migration-table th{
+  color:#fff;
+  background:var(--bg3);
+  border-color:var(--border);
+}
+.migration-table td{
+  color:#c9d1d9;
+  background:transparent;
+  border-color:var(--border);
+}
+
 .btn-primary{
   background:var(--accent);
   border-color:var(--accent);

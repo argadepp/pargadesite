@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Practical on-premises to cloud migration guide with 7R strategy examples by Pratik Argade." />
+  <title>On-Prem to Cloud Migration 7R — Pratik Argade</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="migration.html">Cloud Migration</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="migration-hero">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <span class="eyebrow">Migration Playbook</span>
+          <h1 class="display-5 fw-bold mb-3">On-Prem to Cloud Migration with the 7R Strategy</h1>
+          <p class="lead mb-4">
+            A practical guide for moving data center workloads to cloud using rehost, replatform,
+            refactor, relocate, repurchase, retain, and retire decisions.
+          </p>
+          <a href="#seven-r" class="btn btn-light btn-lg me-2">Explore 7R</a>
+          <a href="#example" class="btn btn-outline-light btn-lg">View Example</a>
+        </div>
+        <div class="col-lg-4">
+          <div class="migration-scorecard">
+            <h2 class="h5">Migration Readiness</h2>
+            <div class="score-row"><span>Discovery</span><strong>Apps, VMs, DBs</strong></div>
+            <div class="score-row"><span>Landing Zone</span><strong>VPC, IAM, Guardrails</strong></div>
+            <div class="score-row"><span>Move Groups</span><strong>Wave-based</strong></div>
+            <div class="score-row"><span>Validation</span><strong>Security, DR, Cost</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container py-5" id="example">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-5">
+          <div class="feature-card p-4 h-100">
+            <h2 class="h4">Example On-Prem Estate</h2>
+            <p>Assume a company runs a classic three-tier application in its data center:</p>
+            <ul class="mb-0">
+              <li>Web tier on VMware VMs behind F5 load balancer.</li>
+              <li>Java application tier on Tomcat and Linux VMs.</li>
+              <li>Oracle database with nightly backup jobs.</li>
+              <li>Jenkins server, shared NFS storage, monitoring, and old reporting tools.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="migration-flow h-100">
+            <div class="flow-node">
+              <span>1</span>
+              <div>
+                <h3>Assess</h3>
+                <p>Inventory applications, dependencies, traffic, compliance, RTO/RPO, and current monthly run cost.</p>
+              </div>
+            </div>
+            <div class="flow-node">
+              <span>2</span>
+              <div>
+                <h3>Plan</h3>
+                <p>Group workloads into migration waves and choose a 7R strategy for every app and platform component.</p>
+              </div>
+            </div>
+            <div class="flow-node">
+              <span>3</span>
+              <div>
+                <h3>Migrate</h3>
+                <p>Build landing zone, connect network, move data, cut over workloads, and validate operations.</p>
+              </div>
+            </div>
+            <div class="flow-node">
+              <span>4</span>
+              <div>
+                <h3>Optimize</h3>
+                <p>Right-size compute, improve automation, modernize CI/CD, strengthen observability, and tune cost.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container pb-5" id="seven-r">
+      <h2 class="section-title text-center">7R Migration Strategies</h2>
+      <p class="subtitle text-center mb-4">Use the 7R model to decide the best target state for each workload, not just the fastest move.</p>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R1</div>
+            <h3>Rehost</h3>
+            <p><strong>Lift and shift</strong> workloads with minimal change.</p>
+            <p class="example"><strong>Example:</strong> Move Tomcat VMs from VMware to Amazon EC2 using AWS Application Migration Service.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R2</div>
+            <h3>Replatform</h3>
+            <p>Make small cloud optimizations without changing core architecture.</p>
+            <p class="example"><strong>Example:</strong> Move self-managed MySQL from a VM to Amazon RDS while keeping the app code mostly unchanged.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R3</div>
+            <h3>Refactor</h3>
+            <p>Redesign the application to use cloud-native patterns.</p>
+            <p class="example"><strong>Example:</strong> Break a monolithic Java service into containers on EKS with SQS, Lambda, and managed databases.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R4</div>
+            <h3>Relocate</h3>
+            <p>Move the platform as-is to an equivalent cloud service.</p>
+            <p class="example"><strong>Example:</strong> Move VMware workloads to VMware Cloud on AWS to exit a data center quickly.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R5</div>
+            <h3>Repurchase</h3>
+            <p>Replace an existing product with a SaaS or managed alternative.</p>
+            <p class="example"><strong>Example:</strong> Replace an on-prem ticketing tool with Jira Service Management or ServiceNow SaaS.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R6</div>
+            <h3>Retain</h3>
+            <p>Keep a workload on-prem for business, risk, latency, or compliance reasons.</p>
+            <p class="example"><strong>Example:</strong> Keep a factory control system in the local data center while connecting it through VPN or Direct Connect.</p>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+          <article class="migration-card h-100">
+            <div class="r-badge">R7</div>
+            <h3>Retire</h3>
+            <p>Decommission applications that no longer provide business value.</p>
+            <p class="example"><strong>Example:</strong> Shut down an old reporting portal after validating no users or jobs depend on it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="container pb-5">
+      <div class="feature-card p-4">
+        <h2 class="h4">Sample Wave Plan</h2>
+        <div class="table-responsive">
+          <table class="table migration-table mb-0">
+            <thead>
+              <tr>
+                <th>Wave</th>
+                <th>Workload</th>
+                <th>7R Choice</th>
+                <th>Cloud Target</th>
+                <th>Validation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Wave 1</td>
+                <td>Dev and test web VMs</td>
+                <td>Rehost</td>
+                <td>EC2 Auto Scaling</td>
+                <td>Smoke test, backup, monitoring</td>
+              </tr>
+              <tr>
+                <td>Wave 2</td>
+                <td>Application database</td>
+                <td>Replatform</td>
+                <td>Amazon RDS or Aurora</td>
+                <td>Data sync, failover, performance test</td>
+              </tr>
+              <tr>
+                <td>Wave 3</td>
+                <td>Core application services</td>
+                <td>Refactor</td>
+                <td>EKS, ALB, GitHub Actions</td>
+                <td>Canary deploy, logs, metrics, rollback</td>
+              </tr>
+              <tr>
+                <td>Wave 4</td>
+                <td>Legacy reports</td>
+                <td>Retire</td>
+                <td>Decommission</td>
+                <td>User sign-off, archive data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer bg-dark text-white py-4">
+    <div class="container text-center">
+      <small>© 2025 Pratik Argade — Senior DevOps Engineer</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
