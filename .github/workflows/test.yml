@@ -1,51 +1,113 @@
-name: Manual Deployment
-
+name: Create Control Plane
+permissions:
+  id-token: write
+  contents: read
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Select environment"
-        required: true
+      action:
         type: choice
+        description: Select the action
+        options:
+          - apply
+          - destroy
+          - refresh    
+      region:
+        type: choice
+        description: Select the region
+        options:
+          - ap-south-1
+          - us-east-1
+          - ap-east-1
+      product:
+        description: Product
+        default: DevOpsTech
+      environment:
+        type: choice
+        description: environment
+        default: dev 
         options:
           - dev
           - qa
+          - stage
           - prod
-
-      version:
-        description: "Enter application version"
-        required: true
+      InstanceType:
+        type: choice
+        description: Select the instance type
+        options:
+          - t2.medium
+          - t3.xlarge
+          - t3.medium
+          - t2.large
+      minsize:
+        type: number
+        description: Min size of ASG  
+        default: 1
+      desiresize:
+        type: number
+        description: Desired size of ASG 
+        default: 1
+      maxsize:
+        type: number
+        description: Max size of ASG   
+        default: 5 
+      zones:
         type: string
-        default: "latest"
-
-      deploy:
-        description: "Deploy application?"
-        required: true
-        type: boolean
-        default: true
-
+        description: Zones for ASGs (comma-separated)                       
 jobs:
-  deploy:
+  tf_fmt:
+    name: Create Masterplane
     runs-on: ubuntu-latest
-
     steps:
-      - name: Show inputs
-        run: |
-          echo "Environment: ${{ inputs.environment }}"
-          echo "Version: ${{ inputs.version }}"
-          echo "Deploy: ${{ inputs.deploy }}"
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy
-        if: ${{ inputs.deploy }}
-        run: |
-          echo "Deploying version ${{ inputs.version }}"
-          echo "Target environment: ${{ inputs.environment }}"
-
-          # Add your deployment commands here
-          # Example:
-          # terraform apply ...
-          # helm upgrade ...
-          # kubectl apply ...
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+    - name: Get the keyfile
+      run: |
+        echo "${{ secrets.SSH_KEY }}" > "${{ github.workspace }}/mcluster/scripts/id_rsa"
+        chmod 600 "${{ github.workspace }}/mcluster/scripts/id_rsa"
+    - name: Configure AWS credentials from Test account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::637423592422:role/git-action-deploy-role
+        aws-region: ap-south-1       
+    - name: Terraform Init
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 1.4.0
+        tf_actions_subcommand: 'init'
+        tf_actions_working_dir: 'mcluster'
+        tf_actions_comment: true
+    - name: Terraform Plan
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 1.4.0
+        tf_actions_subcommand: 'plan'
+        tf_actions_working_dir: 'mcluster'
+        tf_actions_comment: true
+        args: >
+          -var="environment=${{ inputs.environment }}" 
+          -var="product=${{ inputs.product }}" 
+          -var="instanceType=${{ inputs.InstanceType }}" 
+          -var="region=${{ inputs.region }}" 
+          -var="min=${{ inputs.minsize }}" 
+          -var="max=${{ inputs.maxsize }}" 
+          -var="desired=${{ inputs.desiresize }}"
+    - name: Terraform Apply/Destroy
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 1.4.0
+        tf_actions_subcommand: ${{ inputs.action }}
+        tf_actions_working_dir: 'mcluster'
+        tf_actions_comment: true
+        args: >
+          -var="environment=${{ inputs.environment }}" 
+          -var="product=${{ inputs.product }}" 
+          -var="instanceType=${{ inputs.InstanceType }}" 
+          -var="region=${{ inputs.region }}" 
+          -var="min=${{ inputs.minsize }}" 
+          -var="max=${{ inputs.maxsize }}" 
+          -var="desired=${{ inputs.desiresize }}"
+    - name: Deploy application
+      run: |
+         IP=(aws ec2 describe-instances --filters "Name=tag:Name,Values=${{ inputs.product }}-${{ inputs.environment }}-cluster" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
+         echo "IP is $IP"
