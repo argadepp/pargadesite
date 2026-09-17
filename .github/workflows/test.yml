@@ -1,31 +1,51 @@
+name: Manual Deployment
+
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Environment"
+        description: "Select environment"
         required: true
         type: choice
         options:
           - dev
           - qa
-          - staging
           - prod
 
-      image_tag:
-        description: "Docker image tag"
+      version:
+        description: "Enter application version"
         required: true
         type: string
+        default: "latest"
 
-      action:
-        description: "Action to perform"
-        required: true
-        type: choice
-        options:
-          - deploy
-          - rollback
-
-      dry_run:
-        description: "Perform dry run"
+      deploy:
+        description: "Deploy application?"
         required: true
         type: boolean
-        default: false
+        default: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show inputs
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Version: ${{ inputs.version }}"
+          echo "Deploy: ${{ inputs.deploy }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        if: ${{ inputs.deploy }}
+        run: |
+          echo "Deploying version ${{ inputs.version }}"
+          echo "Target environment: ${{ inputs.environment }}"
+
+          # Add your deployment commands here
+          # Example:
+          # terraform apply ...
+          # helm upgrade ...
+          # kubectl apply ...
