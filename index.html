@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pratik Argade — DevOps Engineer</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Learn practical DevOps with Pratik Argade: AWS, Kubernetes, Terraform, CI/CD, GitOps, observability and hands-on labs." />
+  <title>Practical DevOps | Pratik Argade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="assets/icon-192.png" />
@@ -13,122 +13,160 @@
   <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">Pratik Argade</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <a class="navbar-brand fw-bold" href="index.html"><span class="brand-mark">P</span> Pratik Argade<span class="brand-dot">.</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="migration.html">Cloud Migration</a></li>
-          <li class="nav-item"><a class="nav-link" href="sites.html">Sites</a></li>
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="learn.html">Learning Paths</a></li>
+          <li class="nav-item"><a class="nav-link" href="labs.html">Hands-on Labs</a></li>
           <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="migration.html">Cloud Migration</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="sites.html">Sites</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <header class="hero">
-    <div class="container">
-      <div class="row align-items-center g-4">
+  <header class="learning-hero">
+    <div class="container position-relative">
+      <div class="row align-items-center gy-5">
         <div class="col-lg-7">
-          <h1 class="display-5 fw-bold">Hi — I'm <span class="accent">Pratik Pralhad Argade</span></h1>
-          <p class="lead my-4">
-            Senior DevOps Engineer • AWS • Kubernetes • Terraform • CI/CD • GitOps<br />
-            I build reliable cloud infrastructure, automate workflows, and drive observability at scale.
-          </p>
-
-          <a href="about.html" class="btn btn-light btn-lg me-2">About Me</a>
-          <a href="assets/Pratik_Argade_Resume_v2.pdf" class="btn btn-outline-light btn-lg" target="_blank">Resume</a>
-
-          <div class="mt-4">
-            <a class="me-3 link-plain" href="https://github.com/argadepp" target="_blank">GitHub</a>
-            <a class="me-3 link-plain" href="https://www.linkedin.com/in/pratik-argade-2bb841168/" target="_blank">LinkedIn</a>
-            <a class="me-3 link-plain" href="https://www.youtube.com/@devopstech214" target="_blank">YouTube</a>
+          <span class="eyebrow"><span class="status-pulse"></span> Learn by building</span>
+          <h1 class="hero-heading">Practical DevOps<br><span class="gradient-text">for real-world engineers.</span></h1>
+          <p class="hero-copy">Learn cloud infrastructure, Kubernetes, Terraform, CI/CD, GitOps and observability through clear explanations, hands-on labs and real projects.</p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="learn.html" class="btn btn-primary btn-lg">Start learning <span aria-hidden="true">→</span></a>
+            <a href="labs.html" class="btn btn-outline-light btn-lg">Explore hands-on labs</a>
+          </div>
+          <div class="hero-proof mt-4">
+            <span><i class="proof-dot"></i> Step-by-step guides</span>
+            <span><i class="proof-dot"></i> Practical examples</span>
+            <span><i class="proof-dot"></i> Free learning resources</span>
           </div>
         </div>
-
-        <div class="col-lg-4 text-center d-none d-lg-block">
-          <div class="card profile-card shadow-lg bg-transparent text-white">
-            <img src="assets/PratikArgadeProfile.png" alt="Pratik Argade" class="rounded profile-img-lg shadow-sm mx-auto mt-4"/>
-            <div class="card-body">
-              <h5 class="card-title mb-0">Pratik Pralhad Argade</h5>
-              <small class="text-light">Senior DevOps Engineer • 7.8 yrs</small>
+        <div class="col-lg-5">
+          <div class="hero-console">
+            <div class="console-top"><span></span><span></span><span></span><small>devops-lab / terminal</small></div>
+            <div class="console-body">
+              <p class="console-muted"># Your learning journey starts here</p>
+              <p><span class="console-prompt">$</span> kubectl get pods -A</p>
+              <div class="console-output">NAMESPACE&nbsp;&nbsp; NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STATUS<br>default&nbsp;&nbsp;&nbsp;&nbsp; web-app&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>Running</span><br>monitoring&nbsp; prometheus&nbsp;&nbsp; <span>Running</span></div>
+              <p class="mt-3"><span class="console-prompt">$</span> terraform plan</p>
+              <div class="console-success">Plan: 2 to add, 0 to change, 0 to destroy.</div>
+              <div class="console-cursor"></div>
             </div>
+            <div class="console-footer"><span class="live-dot"></span> CLOUD-NATIVE • AUTOMATION • RELIABILITY</div>
           </div>
+          <div class="floating-chip chip-one"><span class="chip-icon">⌘</span> Infrastructure as Code</div>
+          <div class="floating-chip chip-two"><span class="chip-icon">◈</span> Kubernetes & GitOps</div>
         </div>
       </div>
     </div>
   </header>
 
-  <section class="container py-5">
-    <h2 class="section-title text-center">Core Expertise</h2>
-    <p class="subtitle text-center mb-4">Designing secure, scalable and observable cloud-native platforms.</p>
-    <div class="row gy-4">
-      <div class="col-md-4">
-        <div class="feature-card p-4 h-100">
-          <h5 class="fw-semibold">Cloud Infrastructure</h5>
-          <p class="mb-0">Design and build resilient AWS infrastructure with Terraform, Terragrunt and CloudFormation.</p>
+  <main>
+    <section class="container section-space">
+      <div class="section-heading text-center">
+        <span class="eyebrow">Choose your path</span>
+        <h2 class="section-title">Build skills that work in the real world</h2>
+        <p class="subtitle">Follow a learning path, practise with labs, and understand the why behind each tool.</p>
+      </div>
+      <div class="row g-4 mt-2">
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-blue">☁</div><span class="card-kicker">CLOUD ENGINEERING</span>
+            <h3>AWS & Cloud Infrastructure</h3>
+            <p>Understand IAM, VPC, networking, compute, DNS and resilient cloud architecture with Terraform.</p>
+            <a class="text-link" href="learn.html#cloud">Explore cloud path <span>→</span></a>
+          </article>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-cyan">◈</div><span class="card-kicker">CONTAINERS</span>
+            <h3>Kubernetes & GitOps</h3>
+            <p>Learn workloads, services, ingress, Helm, EKS, Argo CD and practical cluster troubleshooting.</p>
+            <a class="text-link" href="learn.html#kubernetes">Explore Kubernetes path <span>→</span></a>
+          </article>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-purple">⇄</div><span class="card-kicker">DELIVERY AUTOMATION</span>
+            <h3>CI/CD & Infrastructure as Code</h3>
+            <p>Create delivery workflows with Jenkins, GitHub Actions, Terraform, Terragrunt and Atlantis.</p>
+            <a class="text-link" href="learn.html#cicd">Explore automation path <span>→</span></a>
+          </article>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-green">◉</div><span class="card-kicker">OBSERVABILITY</span>
+            <h3>Monitoring & Logging</h3>
+            <p>Explore Prometheus, Grafana, Loki, alerting, dashboards and Kubernetes observability patterns.</p>
+            <a class="text-link" href="learn.html#observability">Explore observability path <span>→</span></a>
+          </article>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-orange">⌘</div><span class="card-kicker">AUTOMATION</span>
+            <h3>Linux & Python for DevOps</h3>
+            <p>Build confidence with shell commands, scripting, APIs and repeatable operational tasks.</p>
+            <a class="text-link" href="learn.html#automation">Explore automation path <span>→</span></a>
+          </article>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <article class="learning-card h-100">
+            <div class="card-icon icon-pink">盾</div><span class="card-kicker">SECURE DELIVERY</span>
+            <h3>DevSecOps Foundations</h3>
+            <p>Learn how security checks, least privilege and safer release practices fit into delivery pipelines.</p>
+            <a class="text-link" href="learn.html#devsecops">Explore DevSecOps path <span>→</span></a>
+          </article>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="feature-card p-4 h-100">
-          <h5 class="fw-semibold">Kubernetes & GitOps</h5>
-          <p class="mb-0">EKS management, ArgoCD for GitOps, and secure CI/CD implementations with Jenkins and Atlantis.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-card p-4 h-100">
-          <h5 class="fw-semibold">Observability & Automation</h5>
-          <p class="mb-0">Prometheus, Grafana, Loki, CloudWatch, with automation powered by Python and pipelines.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="tools" class="py-5">
-    <div class="container">
-      <h2 class="section-title text-center mb-3">Featured Tools</h2>
-      <p class="subtitle text-center mb-5">Popular DevOps and DevSecOps tools used in real-world delivery.</p>
+    <section class="section-band">
+      <div class="container section-space">
+        <div class="row align-items-end gy-3 mb-4">
+          <div class="col-lg-8"><span class="eyebrow">Learn by doing</span><h2 class="section-title mb-2">Hands-on labs & project ideas</h2><p class="subtitle mb-0">Practice with reproducible examples and understand the full workflow—not just the commands.</p></div>
+          <div class="col-lg-4 text-lg-end"><a href="labs.html" class="btn btn-outline-light">Browse all labs →</a></div>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-4"><article class="lab-card h-100"><div class="lab-visual visual-k8s"><span class="visual-orbit"></span><span class="visual-symbol">K8s</span><span class="visual-label">ORCHESTRATION</span></div><div class="p-4"><div class="d-flex gap-2 flex-wrap mb-3"><span class="tag">Kubernetes</span><span class="tag">Monitoring</span></div><h3>Kubernetes Observability Stack</h3><p>Plan a lab using Prometheus, Grafana and Loki to explore metrics, dashboards and logs.</p><a href="labs.html#observability" class="text-link">View lab outline →</a></div></article></div>
+          <div class="col-md-6 col-xl-4"><article class="lab-card h-100"><div class="lab-visual visual-iac"><span class="visual-symbol">{ }</span><span class="visual-label">INFRASTRUCTURE AS CODE</span></div><div class="p-4"><div class="d-flex gap-2 flex-wrap mb-3"><span class="tag">Terraform</span><span class="tag">AWS</span></div><h3>Terraform Infrastructure Workflow</h3><p>Practise reusable infrastructure code, plan reviews, state handling and safe change workflows.</p><a href="labs.html#terraform" class="text-link">View lab outline →</a></div></article></div>
+          <div class="col-md-6 col-xl-4"><article class="lab-card h-100"><div class="lab-visual visual-gitops"><span class="visual-symbol">↻</span><span class="visual-label">CONTINUOUS DELIVERY</span></div><div class="p-4"><div class="d-flex gap-2 flex-wrap mb-3"><span class="tag">Argo CD</span><span class="tag">GitOps</span></div><h3>GitOps Deployment with Argo CD</h3><p>Explore declarative deployment, sync status, drift detection and rollback concepts.</p><a href="labs.html#gitops" class="text-link">View lab outline →</a></div></article></div>
+        </div>
+      </div>
+    </section>
 
-      <div class="row text-center g-4">
-        <div class="col-md-4">
-          <div class="tool-card p-4 shadow-sm h-100">
-            <img src="https://seeklogo.com/images/G/github-actions-logo-031704BDC6-seeklogo.com.png" alt="GitHub Actions" class="tool-img mb-3">
-            <h4 class="fw-semibold">GitHub Actions</h4>
-            <p class="text-muted">CI/CD workflows for seamless integration and release automation.</p>
+    <section class="container section-space">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-5">
+          <span class="eyebrow">About your guide</span>
+          <h2 class="section-title">Learn from practical engineering experience.</h2>
+          <p class="subtitle">I'm Pratik Pralhad Argade, a Senior DevOps Engineer working with cloud infrastructure, Kubernetes, automation, CI/CD and observability.</p>
+          <p>My goal is to make complex DevOps concepts easier to understand through structured explanations, hands-on examples and troubleshooting-focused learning.</p>
+          <a href="about.html" class="btn btn-primary mt-2">More about me →</a>
+        </div>
+        <div class="col-lg-7">
+          <div class="profile-feature">
+            <img src="assets/PratikArgadeProfile.png" alt="Pratik Pralhad Argade" class="profile-feature-img">
+            <div class="profile-feature-content"><span class="eyebrow">YOUR INSTRUCTOR</span><h3>Pratik Pralhad Argade</h3><p class="mb-3">Senior DevOps Engineer · AWS · Kubernetes · Terraform · GitOps</p><div class="profile-stats"><div><strong>7.8+</strong><span>Years in DevOps</span></div><div><strong>Cloud</strong><span>AWS & Azure</span></div><div><strong>Hands-on</strong><span>Learning approach</span></div></div><div class="d-flex flex-wrap gap-3 mt-4"><a href="https://github.com/argadepp" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/pratik-argade-2bb841168/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://www.youtube.com/@devopstech214" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div></div>
           </div>
         </div>
-
-        <div class="col-md-4">
-          <div class="tool-card p-4 shadow-sm h-100">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Grafana_icon.svg/250px-Grafana_icon.svg.png" alt="Grafana" class="tool-img mb-3">
-            <h4 class="fw-semibold">Grafana</h4>
-            <p class="text-muted">Actionable observability through dashboards, alerts and metrics.</p>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="tool-card p-4 shadow-sm h-100">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg" alt="Kubernetes" class="tool-img mb-3">
-            <h4 class="fw-semibold">Kubernetes</h4>
-            <p class="text-muted">Container orchestration and workload reliability at scale.</p>
-          </div>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="footer bg-dark text-white py-4">
-    <div class="container text-center">
-      <small>© 2025 Pratik Argade — Senior DevOps Engineer</small>
-    </div>
-  </footer>
+    <section class="youtube-band">
+      <div class="container py-5"><div class="row align-items-center gy-4"><div class="col-lg-8"><span class="eyebrow">Watch & learn</span><h2 class="section-title">Prefer video tutorials?</h2><p class="subtitle mb-0">Visit my YouTube channel for DevOps demos, tool walkthroughs and practical engineering content.</p></div><div class="col-lg-4 text-lg-end"><a class="btn btn-youtube btn-lg" href="https://www.youtube.com/@devopstech214" target="_blank" rel="noopener noreferrer">▶ Visit YouTube channel</a></div></div></div>
+    </section>
+  </main>
 
+  <footer class="footer py-4"><div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2"><small>© 2026 Pratik Argade · Practical DevOps Learning</small><div class="footer-links"><a href="learn.html">Learning Paths</a><a href="labs.html">Labs</a><a href="blog.html">Blog</a><a href="about.html">Contact & Profile</a></div></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/install.js"></script>
 </body>
