@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A practical build log for a DevOps AI Copilot using Kubernetes MCP tools, Streamlit, Ollama, and Qwen models." />
+  <title>Building a Local DevOps AI Copilot with MCP and Ollama — Pratik Argade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../assets/icon-192.png" />
+  <meta name="theme-color" content="#0d1117" />
+  <link rel="stylesheet" href="../styles/style.css" />
+  <style>
+    .article-hero{padding:4.5rem 0;background:radial-gradient(ellipse at 50% 0,rgba(88,166,255,.15),transparent 55%),linear-gradient(135deg,#0d1117,#0f2644 55%,#0d1117);border-bottom:1px solid var(--border)}
+    .article-wrap{max-width:900px;margin:auto}
+    .article-body{font-size:1.02rem;line-height:1.85}
+    .article-body h2{font-size:1.8rem;margin:2.6rem 0 1rem}
+    .article-body h3{font-size:1.25rem;margin:1.7rem 0 .7rem}
+    .article-body p,.article-body li{color:#c9d1d9}
+    .article-body code{color:#a5d6ff}
+    .article-body pre{background:#090d13;border:1px solid var(--border);border-radius:12px;padding:1.1rem;overflow:auto;color:#c9d1d9;font-size:.9rem}
+    .article-note{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);padding:1rem 1.2rem;border-radius:8px;margin:1.5rem 0}
+    .architecture{white-space:pre;min-width:560px}
+    .article-table{width:100%;border-collapse:collapse;margin:1rem 0}
+    .article-table th,.article-table td{padding:.8rem;border:1px solid var(--border);text-align:left;vertical-align:top}
+    .article-table th{background:var(--bg2);color:var(--text)}
+    .article-table td{color:#c9d1d9}
+    @media(max-width:600px){.article-hero{padding:3rem 0}.article-body h2{font-size:1.5rem}.article-table{font-size:.88rem}}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html"><span class="brand-mark">P</span> Pratik Argade<span class="brand-dot">.</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../learn.html">Learning Paths</a></li>
+          <li class="nav-item"><a class="nav-link" href="../labs.html">Hands-on Labs</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="../blog.html">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="../migration.html">Cloud Migration</a></li>
+          <li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="../sites.html">Sites</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="article-hero">
+    <div class="container article-wrap">
+      <span class="eyebrow">DevOps • AI • Kubernetes</span>
+      <h1 class="display-5 fw-bold mt-3 mb-3">Building a DevOps AI Copilot with MCP and Ollama</h1>
+      <p class="lead mb-4">Connecting a Kubernetes cluster to an AI assistant using a Python MCP server, Streamlit, and a locally hosted language model.</p>
+      <div class="hero-proof"><span><i class="proof-dot"></i> Practical POC notes</span><span><i class="proof-dot"></i> Read-only cluster tools</span><span><i class="proof-dot"></i> Local model experiments</span></div>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <article class="article-wrap article-body">
+      <p>What if you could ask a question such as “Which pods are running in the dev namespace?” and have an AI assistant call Kubernetes tools to retrieve the live data instead of guessing from general knowledge? That was the idea behind my DevOps AI Copilot proof of concept.</p>
+      <p>The project combines the <strong>Model Context Protocol (MCP)</strong> with a Python tool server, a Streamlit chat interface, and a choice of language-model provider. I started with Gemini and then added Ollama so I could experiment with running a smaller model locally or on a small virtual machine.</p>
+
+      <div class="article-note"><strong>Scope note:</strong> This is a build log describing the components and experiments from the POC, not a claim that the system is production-ready. Commands and architecture below are illustrative where noted; adapt them to your own cluster and repository.</div>
+
+      <h2>1. Architecture at a glance</h2>
+      <p>The design separates the user interface, language model, MCP tools, and Kubernetes API. The model decides when a tool is useful; the MCP server performs the specific read-only operation and returns structured results for the assistant to explain.</p>
+      <pre class="architecture">Operator
+   |
+   v
+Streamlit UI  ---- provider selection ----> Ollama / Gemini
+   |                                          |
+   |                                   tool-call request
+   v                                          |
+Python MCP client <---------------------------+
+   |
+   | MCP over stdio
+   v
+Python MCP server
+   |-- get_devops_info
+   |-- get_pods
+   |-- get_nodes
+   |-- get_deployments
+   |
+   v
+Kubernetes API (K3d / configured cluster)</pre>
+      <p>This is intentionally a small architecture: Streamlit provides the chat experience, MCP standardizes tool access, and the Kubernetes client/server side is responsible for retrieving cluster data.</p>
+
+      <h2>2. What the MCP server can do</h2>
+      <p>The Python MCP server exposes a focused set of Kubernetes and DevOps tools:</p>
+      <table class="article-table">
+        <thead><tr><th>Tool</th><th>Purpose</th><th>Example question</th></tr></thead>
+        <tbody>
+          <tr><td><code>get_devops_info</code></td><td>Return general DevOps or environment information exposed by the POC.</td><td>“What can this assistant help me inspect?”</td></tr>
+          <tr><td><code>get_pods</code></td><td>Read pod information from the configured cluster.</td><td>“List pods in the dev namespace.”</td></tr>
+          <tr><td><code>get_nodes</code></td><td>Read node information and status.</td><td>“Show me the cluster nodes.”</td></tr>
+          <tr><td><code>get_deployments</code></td><td>Inspect deployments in a namespace or the configured scope.</td><td>“Which deployments are present in default?”</td></tr>
+        </tbody>
+      </table>
+      <p>The important point is that the model does not magically know the cluster state. The MCP tool calls fetch the information, and the model helps translate the returned data into a useful answer.</p>
+
+      <h2>3. Why add Ollama?</h2>
+      <p>The first version used a Streamlit application with Gemini 2.5 Flash. I then added a provider switch so I could compare a hosted model with a model served by Ollama. The initial local default was <code>qwen2.5:3b</code>; the provider client was separated into <code>llm_client.py</code>, with the Streamlit UI retaining the tool-call loop.</p>
+      <ul>
+        <li><strong>Gemini 2.5 Flash:</strong> convenient for experimenting with a hosted model, subject to network access, credentials, and provider quotas.</li>
+        <li><strong>Ollama + Qwen2.5 3B:</strong> a local-model option that avoids sending prompts to a hosted LLM provider, but still requires enough CPU, RAM, and disk.</li>
+        <li><strong>Separate conversation histories:</strong> keeping provider histories separate helps avoid mixing context when switching between models.</li>
+      </ul>
+      <p>Local inference can improve control over where prompts are processed, but it is not automatically faster or cheaper in every setup. The available hardware and model size matter.</p>
+
+      <h2>4. What happened on a small Azure VM?</h2>
+      <p>During a later experiment, I tested a smaller <code>qwen2.5:1.5b</code> model on an Azure VM with 2 vCPUs and roughly 3.8 GiB of RAM, without swap. The Ollama process reached around 195% CPU usage during inference.</p>
+      <div class="article-note"><strong>Lesson learned:</strong> a model can fit on a small VM and still put sustained pressure on its CPU. Check latency, memory, CPU saturation, and concurrency before deciding that a local LLM is suitable for an operational assistant.</div>
+      <p>For a small proof of concept, reduce model size and concurrency, keep requests short, and measure response time under realistic prompts. For a shared or production service, size the compute deliberately and define what should happen when inference is slow or unavailable.</p>
+
+      <h2>5. From chat to a DevOps AI Command Center</h2>
+      <p>The next iteration extended the idea beyond a chat window into a lightweight command-center layout. The planned and implemented areas included:</p>
+      <ul>
+        <li>A dashboard for pod, node, and deployment health, plus events and restart information.</li>
+        <li>A separate monitoring process that can run independently of an interactive Streamlit session.</li>
+        <li>Namespace selection for monitoring, with the initial scope focused on namespaces such as <code>default</code> and <code>dev</code>.</li>
+        <li>SQLite-backed settings and notification configuration.</li>
+        <li>Telegram and Slack notification configuration, including test-notification workflows.</li>
+        <li>AI-assisted diagnosis to help explain detected signals.</li>
+      </ul>
+      <p>The monitoring workflow is intended to detect and explain issues—not automatically change the cluster. That boundary is deliberate: an assistant can recommend an investigation while an engineer remains responsible for approving operational changes.</p>
+
+      <h2>6. A sensible safety model</h2>
+      <p>Giving an AI tool access to infrastructure should start with least privilege. For this POC, the Kubernetes MCP tools are read-only. A practical deployment should also:</p>
+      <ul>
+        <li>Use a dedicated Kubernetes ServiceAccount and narrowly scoped RBAC permissions.</li>
+        <li>Keep credentials and provider API keys out of source control and logs.</li>
+        <li>Restrict which namespaces and resources can be queried.</li>
+        <li>Validate tool inputs and cap response sizes so large cluster results do not overwhelm the model context.</li>
+        <li>Record tool calls and failures without unnecessarily storing sensitive resource data.</li>
+        <li>Keep remediation separate; require explicit human approval before any future write-capable action.</li>
+      </ul>
+      <div class="article-note"><strong>Security reminder:</strong> read-only tools reduce risk but do not remove it. Kubernetes metadata, logs, and event messages can still contain internal names or sensitive operational details.</div>
+
+      <h2>7. A practical way to reproduce the POC</h2>
+      <p>The exact commands depend on your repository and cluster setup, but a useful build sequence is:</p>
+      <ol>
+        <li>Start with a reachable development cluster such as K3d and verify access using <code>kubectl</code>.</li>
+        <li>Implement the Python MCP server with one read-only tool first, such as listing pods.</li>
+        <li>Test each tool directly before connecting an LLM.</li>
+        <li>Connect the Streamlit UI to the MCP client and implement the tool-call loop.</li>
+        <li>Add a provider abstraction so Ollama and Gemini can be selected independently.</li>
+        <li>Test questions where the tool returns data, no results, or an error.</li>
+        <li>Add monitoring and notifications as a separate workflow, then measure model latency and resource use.</li>
+      </ol>
+      <p>For local Ollama testing, first make sure the model is available in the Ollama instance you are using. For example, the model pull command for the smaller experiment is:</p>
+      <pre>ollama pull qwen2.5:1.5b</pre>
+      <p>That command only downloads the model; it does not install or configure the MCP server, Kubernetes access, or Streamlit application.</p>
+
+      <h2>8. What I learned</h2>
+      <ul>
+        <li><strong>MCP gives tools a clear boundary:</strong> the model can request specific operations without embedding all infrastructure logic in the prompt.</li>
+        <li><strong>Tool quality matters:</strong> predictable, narrow tools are easier to test and safer to operate than a generic command-execution tool.</li>
+        <li><strong>Local models need capacity planning:</strong> even a small model can saturate a low-core VM.</li>
+        <li><strong>Monitoring should be decoupled from chat:</strong> scheduled detection should not depend on a user keeping a browser tab open.</li>
+        <li><strong>Diagnosis is a safer first step than remediation:</strong> make the assistant explain evidence before considering any action-taking capabilities.</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+      <p>This POC helped me explore how MCP, Kubernetes, Streamlit, and Ollama can work together to make operational information easier to query. The most valuable next steps are not simply choosing a bigger model: they are improving tool validation, measuring latency, tightening RBAC, and making alerts reliable.</p>
+      <p>If you are building a similar DevOps assistant, start with one read-only tool, prove the complete request-and-response flow, and expand only after you can test and observe each component.</p>
+
+      <hr class="my-5" />
+      <div class="d-flex flex-wrap gap-3">
+        <a class="btn btn-primary" href="../labs.html">Explore hands-on labs</a>
+        <a class="btn btn-outline-light" href="../blog.html">Back to all posts</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer py-4 mt-5">
+    <div class="container text-center"><small>© 2026 Pratik Argade — Senior DevOps Engineer</small></div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../scripts/install.js"></script>
+</body>
+</html>
