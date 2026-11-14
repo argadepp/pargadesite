@@ -449,3 +449,10 @@ body { overflow-x: hidden; }
 .roadmap-stage-thumb{display:block;width:100%;max-width:520px;margin:14px 0 18px;border:1px solid #30445c;border-radius:12px;background:#101a28}
 .roadmap-stage-thumb img{display:block;width:100%;height:auto;border-radius:11px}
 @media(max-width:575px){.stage-illustration{padding:6px;margin:18px 0 26px}.roadmap-stage-thumb{margin:12px 0}}
+
+
+/* Clear calls-to-action for roadmap stage guides */
+.stage-guide-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;padding:.65rem 1rem;border-radius:9px;font-size:.84rem;letter-spacing:.01em;box-shadow:0 5px 16px rgba(0,0,0,.18);transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.stage-guide-btn:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(88,166,255,.2)}
+.path-row>.path-next{grid-column:2;margin:0;padding:0;border:0;background:transparent}
+@media(max-width:575.98px){.stage-guide-btn{width:100%;padding:.75rem 1rem}.path-row>.path-next{grid-column:2}}
