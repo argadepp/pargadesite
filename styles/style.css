@@ -441,3 +441,11 @@ body { overflow-x: hidden; }
 .roadmap-sidebar p{color:#9eacbd;font-size:.87rem}
 @media(max-width:991px){.roadmap-sidebar{position:static}.roadmap-sidebar ol{max-height:none;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:575px){.concept-grid{grid-template-columns:1fr}.concept-visual{padding:18px}.visual-node{min-width:125px;flex:1}.visual-arrow{transform:rotate(90deg);font-size:1rem}.stage-navigation .btn{width:100%}.roadmap-section h2{font-size:1.4rem}}
+
+/* Stage-specific visual learning illustrations */
+.stage-illustration{margin:24px 0 34px;padding:10px;border:1px solid #2c4058;border-radius:18px;background:#101a28;overflow:hidden}
+.stage-illustration img{display:block;width:100%;height:auto;border-radius:12px}
+.stage-illustration figcaption{padding:10px 12px 2px;color:#91a4ba;font-size:.82rem;text-align:center}
+.roadmap-stage-thumb{display:block;width:100%;max-width:520px;margin:14px 0 18px;border:1px solid #30445c;border-radius:12px;background:#101a28}
+.roadmap-stage-thumb img{display:block;width:100%;height:auto;border-radius:11px}
+@media(max-width:575px){.stage-illustration{padding:6px;margin:18px 0 26px}.roadmap-stage-thumb{margin:12px 0}}
